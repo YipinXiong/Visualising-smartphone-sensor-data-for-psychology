@@ -1,13 +1,13 @@
 import React from 'react';
 import './patient.css';
 
-const Patient = () => {
+const Patient = props => {
+  console.log(props);
   return (
     <div className="patient">
       <div className="container content-wrapper">
-        <img className="patient-avatar" alt="avatar" src="../../../public/favicon.ico"/>
-        <div className="patient-name">Lee Simpson</div>
-        <div className="patient-email">lee.Simpson@gmail.com</div>
+        <div className="patient-name">{props.patient.name}</div>
+        <div className="patient-email">{props.patient.email}</div>
       </div>
     </div>
     )

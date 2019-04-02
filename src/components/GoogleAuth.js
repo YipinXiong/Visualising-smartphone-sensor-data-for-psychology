@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { signIn, signOut } from '../actions'
+import { signIn, signOut } from '../actions';
+import history from '../history';
 
 // For convenience, we put all ajax request here. 
 class GoogleAuth extends React.Component {
@@ -22,6 +23,7 @@ class GoogleAuth extends React.Component {
   onAuthChange = (isSignedIn) => {
     if(isSignedIn) {
       this.props.signIn(this.auth.currentUser.get().getId());
+      history.push('/');
     } else {
       this.props.signOut();
     }

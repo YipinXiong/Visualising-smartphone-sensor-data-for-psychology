@@ -5,7 +5,7 @@ import {
   FETCH_PATIENTS 
  } from './types';
 
-// import history from '../history';
+ import jsonPlaceHolder from '../components/api';
 
 export const signIn = userId =>{
   return {
@@ -18,4 +18,12 @@ export const signOut = () => {
   return {
     type: SIGN_OUT
   }
+}
+
+export const fetchPatients = () => async dispatch => {
+  const { data } = await jsonPlaceHolder.get('/users');
+  dispatch({
+    type: FETCH_PATIENTS,
+    payload: data 
+  });
 }
