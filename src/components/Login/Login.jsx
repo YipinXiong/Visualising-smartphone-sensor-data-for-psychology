@@ -40,9 +40,9 @@ class Login extends React.Component {
 
   render(){
     return (
-      <div class="wrapper fadeInDown">
+      <div className="wrapper fadeInDown">
        <div id="formContent">
-         <div class="fadeIn first">
+         <div className="fadeIn first">
            <i className="fas fa-key fa-2x my-3">  Login</i>
          </div>
          { this.renderForm() }

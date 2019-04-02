@@ -1,19 +1,19 @@
 import React from 'react';
 import Header from './Header/Header';
-import {connect} from 'react-redux';
 import history from '../history';
 import { Router,Route, Switch } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute'
 import Login from './Login/Login';
+import DashBoard from './DashBoard';
 
-const App = ()=>{
+const App = (props)=>{
   return (
     <>
     <Router history={history}>
       <div>
         <Header />
         <Switch>
-          <PrivateRoute path="/" exact component={Login} is-signed-in={()=> this.props.isSignedIn} />
+          <PrivateRoute path="/" exact component={DashBoard} />
           <Route path="/login" exact component = {Login} />
           {/* <Route path="/" exact component={StreamList} />
           // <Route path="/streams/new" exact component={StreamCreate} />
@@ -27,8 +27,5 @@ const App = ()=>{
   );
 }
 
-const mapStateToProps = state => {
-  return {isSignedIn: state.auth.isSignedIn}
-}
 
-export default connect(mapStateToProps, null)(App);
+export default App;
