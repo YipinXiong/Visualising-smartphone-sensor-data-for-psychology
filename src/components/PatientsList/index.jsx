@@ -4,14 +4,17 @@ import { fetchPatients } from '../../actions'
 import Patient from '../Patient/Patient';
 
 class PatientsList extends React.Component {
-  
+
   componentDidMount() {
     this.props.fetchPatients();
   }
 
   renderList() {
     return this.props.patients.map( patient => {
-        return <Patient key={patient.id} patient={patient} /> 
+        return <Patient
+                key={patient.id} 
+                patient={patient}
+                /> 
     })
   }
   
@@ -35,7 +38,7 @@ class PatientsList extends React.Component {
 
   componentDidUpdate() {
     if(this.props.patients){
-      console.log(this.props.patients)
+      // console.log(this.props.patients)
     }
   }
 }

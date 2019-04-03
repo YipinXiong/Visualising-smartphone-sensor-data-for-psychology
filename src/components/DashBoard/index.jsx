@@ -51,7 +51,7 @@ class DashBoard extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return {state};
+  return { clickedPatient: state.currentPatient.clickedPatient};
 }
 
 export default connect(mapStateToProps)(DashBoard);

@@ -2,10 +2,11 @@ import {
   SIGN_IN,
   SIGN_OUT,
   FETCH_PATIENT,
-  FETCH_PATIENTS 
+  FETCH_PATIENTS,
+  CLICK_PATIENT 
  } from './types';
 
- import jsonPlaceHolder from '../components/api';
+ import jsonPlaceHolder from '../api';
 
 export const signIn = userId =>{
   return {
@@ -34,4 +35,8 @@ export const fetchPatient = patientId => async dispatch => {
     type: FETCH_PATIENT,
     payload: data
   })
+}
+
+export const clickPatient = patientId => {
+  return {type: CLICK_PATIENT, payload: patientId}
 }
