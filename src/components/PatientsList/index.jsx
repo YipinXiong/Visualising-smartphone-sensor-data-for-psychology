@@ -18,9 +18,15 @@ class PatientsList extends React.Component {
   render() {
     if(this.props.patients) {
       return (
-        <div className="patientsList">
+        <ul className="nav flex-column">
+          <li className="nav-item my-4">
+            <h3>
+              <i className="far fa-handshake" />
+              Patients
+            </h3> 
+          </li>
           {this.renderList()}
-        </div>
+        </ul>
       ) 
     } else {
       return <div>Loading</div>

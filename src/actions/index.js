@@ -27,3 +27,11 @@ export const fetchPatients = () => async dispatch => {
     payload: data 
   });
 }
+
+export const fetchPatient = patientId => async dispatch => {
+  const { data } = await jsonPlaceHolder.get(`/users/${patientId}`);
+  dispatch({
+    type: FETCH_PATIENT,
+    payload: data
+  })
+}
