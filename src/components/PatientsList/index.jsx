@@ -22,7 +22,7 @@ class PatientsList extends React.Component {
     if(this.props.patients) {
       return (
         <ul className="nav flex-column">
-          <li className="nav-item my-4">
+          <li className="nav-item mt-4 mb-3 d-flex justify-content-center">
             <h3>
               <i className="far fa-handshake" />
               Patients
@@ -33,12 +33,6 @@ class PatientsList extends React.Component {
       ) 
     } else {
       return <div>Loading</div>
-    }
-  }
-
-  componentDidUpdate() {
-    if(this.props.patients){
-      // console.log(this.props.patients)
     }
   }
 }
