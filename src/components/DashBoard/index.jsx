@@ -1,15 +1,14 @@
 import React from 'react';
 import PatientsList from '../PatientsList';
 import {connect} from 'react-redux';
+import './dashboard.css';
 
 class DashBoard extends React.Component {
   
   renderPatientsList() {
     return (
-      <nav className="col-md-3 d-none d-md-block bg-light sidebar">
-        <div className="sidebar-sticky">
-          <PatientsList />
-        </div>
+      <nav id="patientslist" className="bg-light">
+        <PatientsList />
       </nav>
     );
   }
@@ -29,12 +28,9 @@ class DashBoard extends React.Component {
 
   render(){
     return (
-      <div className="container-fluid">
-        <div className="row">
-
+      <div id="dashboard-wrapper">
           {this.renderPatientsList()}
-
-          <main role="main" className="col-md-9 ml-sm-auto col-lg-9 px-4">
+          <main id="main-board" role="main" className="px-4">
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
               <h1 className="h2"> {this.props.clickedPatient? this.props.clickedPatient.name:''} Dashboard </h1>
               <div className="btn-toolbar mb-2 mb-md-0">
@@ -49,7 +45,6 @@ class DashBoard extends React.Component {
             </div>
             { this.renderMainBoard(this.props.clickedPatient) }
           </main> 
-        </div>
       </div>
     )
   }

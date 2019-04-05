@@ -1,0 +1,28 @@
+#dashboard-wrapper {
+  display: flex;
+  overflow: hidden;
+  height: 100vh;
+  margin-top: -58.9583px;
+  padding-top: 58.9583px;
+  position: relative;
+  width: 100%;
+  backface-visibility: hidden;
+  will-change: overflow;
+}
+
+#main-board, #patientslist {
+  overflow: auto;
+  height: auto;
+  padding: .5rem;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+}
+
+#patientslist {
+  flex-basis: 15rem;
+}
+
+#main-board {
+  flex: 1;
+}
+
