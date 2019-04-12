@@ -1,0 +1,29 @@
+.right-shadow {
+  border-right: 5px solid rgba(0, 0, 0, .9);
+}
+
+.patient-wrapper {
+  padding: 0;
+  margin: 0;
+  border-bottom: 1px solid rgba(0,0,0,.125);
+  margin-top: 15px;
+  font-size: 18px;
+}
+
+.patient-name {
+  font-style: italic;
+  font-weight: bold;
+}
+
+.patient-name:hover {
+  color: forestgreen;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.email {
+  font-size: x-small;
+}
+
+
+

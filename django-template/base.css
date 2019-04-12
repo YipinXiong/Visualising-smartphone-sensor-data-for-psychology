@@ -1,0 +1,78 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Georgia, Times, 'Times New Roman', serif;
+}
+
+#base__wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+}
+
+#header {
+  width: 100vw;
+  height: 60px;
+  order: 0;
+  z-index: 100;
+}
+
+/* style for main dashboard */
+
+#wrapper__dashboard {
+  order: 1;
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  height: 100vh;
+  margin-top: -60px;
+  padding-top: 60px;
+  position: relative;
+  width: 100%;
+  backface-visibility: hidden;
+  will-change: overflow;
+}
+
+
+#main_board, #patients_list {
+  overflow: auto;
+  height: auto;
+  padding: .5rem;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+}
+
+#patients_list {
+  flex-basis: 15rem;
+  order: 1;
+}
+
+#main_board {
+  flex: 1;
+  order: 2;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 4px;
+  height:5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2); 
+  border-radius: 10px;
+  height: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
