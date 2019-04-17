@@ -2,6 +2,10 @@ const width = 600;
 const height =400;
 const padding = 80;
 
+const tooltip = d3.select("body")
+                    .append("div")
+                      .classed("tooltip", true);
+
 const svg = d3.select('svg')
                 .attr("width", width)
                 .attr("height", height);
@@ -69,6 +73,22 @@ svg.append("g")
     .attr("width", xScale.bandwidth())
     .attr("y", d => yScale(d.duration))
     .attr("height", d => height - padding - yScale(d.duration))
-    .attr("fill", "steelblue");
+    .attr("fill", "steelblue")
+    .on("mousemove", showTooltips)
+    .on("mouseout" , hideTooltips)
+    .on("click",changePie);
     
-    
+function showTooltips (d) {
+  tooltip.style("opacity", 1)
+          .style("left", d3.event.x -(tooltip.node().offsetWidth/2) + "px")
+          .style("top", d3.event.y + 30 + "px")
+          .html(`
+            <p>Date: ${d.date}</p>
+            <p>Frequencies: ${d.duration}</p>
+          `);
+}
+
+function hideTooltips () { tooltip.style("opacity", 0) }
+
+//TODO: click to change the pie chart
+function changePie() {};
