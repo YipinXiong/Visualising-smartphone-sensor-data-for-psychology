@@ -1,6 +1,6 @@
 const width = 600;
 const height =400;
-const padding = 50;
+const padding = 80;
 
 const svg = d3.select('svg')
                 .attr("width", width)
@@ -35,13 +35,29 @@ svg.append('g')
     .attr('transform', `translate(${padding}, 0)`)
     .call(yAxis)
 
+
 svg.append("text")
-.attr("transform", "rotate(-90)")
-.attr("y", 0 - padding)
-.attr("x",0 - (height / 2))
-.attr("dy", "1em")
-.style("text-anchor", "middle")
-.text("Screen usage hours");    
+    .attr("x", width/2)
+    .attr("y", 40)
+    .style("font-size", "1.5em")
+    .style("text-anchor", "middle")
+    .style("font-weight", "bold")
+    .text("Latest 7 days Screen Usage");
+
+svg.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("x", -height/2 )
+  .attr("y", padding)
+  .attr("dy", "-1.1em")
+  .style("text-anchor", "middle")
+  .text("Frequency")
+
+svg.append("text")
+  .attr("x", width/2)
+  .attr("y", height - padding)
+  .attr("dy", "3em")
+  .style("text-anchor", "middle")
+  .text("Date");
 
 svg.append("g")
   .selectAll("rect")
