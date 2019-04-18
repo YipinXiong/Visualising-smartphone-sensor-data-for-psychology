@@ -27,3 +27,46 @@ const screenUsageData = [
     date: "10/04",
     duration: 6
   }]
+
+  const appUsage = [
+    {
+      id: 1,
+      name: "Facebook",
+      duration: 5
+    },
+    {
+      id: 2,
+      name: "Whatsapp",
+      duration: 5
+    },
+    {
+      id: 1,
+      name: "Facebook",
+      duration: 20
+    },
+    {
+      id: 3,
+      name: "Messager",
+      duration: 4
+    },
+    {
+      id: 4,
+      name: "Netflix",
+      duration: 8
+    },
+    {
+      id: 1,
+      name: "Facebook",
+      duration: 5
+    },
+    {
+      id: 4,
+      name: "Netflix",
+      duration: 8
+    },
+    {
+      id: 5,
+      name: "Youtube",
+      duration: 10
+    },
+  ]
