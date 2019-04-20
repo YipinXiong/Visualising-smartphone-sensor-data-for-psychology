@@ -25,7 +25,7 @@ const pieColor = d3.scaleOrdinal()
 
 const pie = d3.pie()
               .value(d => d.duration)
-              .sort((a, b) => a.id - b.id);
+              .sort(null);
 
 //The arc generator
 const arc = d3.arc()
@@ -84,15 +84,20 @@ pieSvg
         return (midangle < Math.PI ? 'start' : 'end')
     }); 
 
+function drawPieChart(date) {
+  let data = psyData.filter(d => d.date === date)[0];
+
+}
+
 
 const xScale = d3.scaleBand()
                 .paddingInner(0.3)
                 .paddingOuter(0.2)
-                .domain(screenUsageData.map(d => d.date))
+                .domain(psyData.map(d => d.date))
                 .range([padding, width-padding]);
 
 const yScale = d3.scaleLinear()
-                .domain([0, d3.max(screenUsageData, d => d.duration)])
+                .domain([0, d3.max(psyData, d => d.totalFreq)])
                 .range([height - padding, padding]);
 
 const xAxis = d3.axisBottom(xScale);
@@ -127,7 +132,7 @@ svg.append("text")
   .attr("transform", "rotate(-90)")
   .attr("x", -height/2 )
   .attr("y", padding)
-  .attr("dy", "-1.1em")
+  .attr("dy", "-3em")
   .style("text-anchor", "middle")
   .text("Frequency")
 
@@ -140,14 +145,14 @@ svg.append("text")
 
 svg.append("g")
   .selectAll("rect")
-    .data(screenUsageData)
+    .data(psyData)
     .enter()
     .append("rect")
     .classed("bar", true)
     .attr("x", d => xScale(d.date))
     .attr("width", xScale.bandwidth())
-    .attr("y", d => yScale(d.duration))
-    .attr("height", d => height - padding - yScale(d.duration))
+    .attr("y", d => yScale(d.totalFreq))
+    .attr("height", d => height - padding - yScale(d.totalFreq))
     .attr("fill", "steelblue")
     .on("mousemove", showTooltips)
     .on("mouseout" , hideTooltips)
@@ -160,7 +165,7 @@ function showTooltips (d) {
           .style("top", d3.event.y + 30 + "px")
           .html(`
             <p>Date: ${d.date}</p>
-            <p>Frequencies: ${d.duration}</p>
+            <p>Frequencies: ${d.totalFreq}</p>
           `);
 }
 
