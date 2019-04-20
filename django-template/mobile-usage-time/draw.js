@@ -12,12 +12,25 @@ const svg = d3.select('svg')
 
 const radius = Math.min(width, height)/2 - padding;
 
+                 
+
+
 const pieSvg = d3.select("body")
                   .append("svg")
                     .attr("width", width)
-                    .attr("height", height)
-                  .append("g")
-                    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+                    .attr("height", height) 
+                    .append("g")
+                      .classed("date-pie-chart",true)
+                      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+pieSvg.append("text")
+  .attr("x", 0)
+  .attr("y", -(height-padding)/2)
+  .classed('pie-title',true)
+  .style("font-size", "1.5em")
+  .style("text-anchor", "middle")
+  .style("font-weight", "bold")
+  .text("")
 
 
 function drawPieChart(date) {
@@ -27,9 +40,7 @@ function drawPieChart(date) {
                       .domain(readyData.map(d => d.key))
                       .range(d3.schemeDark2);
 
-  let transition =  d3.transition()
-                        .duration(750)
-                        .ease(d3.easeLinear);
+  d3.select('.pie-title').text(`${date}'s application-usage details`);
 
   const pie = d3.pie()
                 .value(d => d.value)
@@ -104,7 +115,7 @@ function drawPieChart(date) {
         pos[0] = radius * 0.99 * (midangle < Math.PI ? 1 : -1);
         return 'translate(' + pos + ')';
       })
-      .style('font-size', '10px')
+      .style('font-size', '13px')
       .style('text-anchor', d => {
         let midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
         return (midangle < Math.PI ? 'start' : 'end')
