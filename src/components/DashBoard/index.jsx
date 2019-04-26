@@ -1,6 +1,7 @@
 import React from 'react';
 import PatientsList from '../PatientsList';
 import { connect } from 'react-redux';
+import MainContent from '../MainContent';
 import './dashboard.css';
 
 class DashBoard extends React.Component {
@@ -31,8 +32,7 @@ class DashBoard extends React.Component {
 
   renderMainBoard(clickedPatient = null) {
     if (clickedPatient) {
-      console.log(clickedPatient)
-      return <div>{clickedPatient.website}</div>
+      return <MainContent />
     }
     return (
       <section>
