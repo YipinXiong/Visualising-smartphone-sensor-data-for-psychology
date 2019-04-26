@@ -46,13 +46,36 @@
       margin-left: -6px; 
     }
 
+    #map {
+      height: 50vh;
+      width: 50vw;
+    }
+
+    #main-content-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #svg-wrapper {
+      display: flex;
+      flex-direction: row;
+    }
   </style>
+
 </head>
 
 <body>
-  <svg></svg>
+  <div id="main-content-wrapper">
+    <div id="svg-wrapper">
+      <svg></svg>
+    </div>
+    <div id="map">
+    </div>
+  </div>
 </body>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="./data.js"></script>
 <script src="./draw.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVZZVGG9W9UsAuhSQ89YzySBGhr6hkk7c&callback=initMap"
+async defer></script>
 </html>

@@ -1,5 +1,5 @@
-const width = 600;
-const height =400;
+const width = 500;
+const height =300;
 const padding = 80;
 
 const tooltip = d3.select("body")
@@ -86,7 +86,7 @@ function drawPieChart(date) {
     .append('polyline')
     .merge(allPolylines)
       .classed('polyline', true)
-      .attr("stroke", "black")
+      .attr("stroke", d => pieColor(d.data.key))
       .style('fill', 'none')
       .style('stroke-width', 1)
       .attr('points', d => {
@@ -116,6 +116,7 @@ function drawPieChart(date) {
         return 'translate(' + pos + ')';
       })
       .style('font-size', '13px')
+      .style('fill', d => pieColor(d.data.key))
       .style('text-anchor', d => {
         let midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
         return (midangle < Math.PI ? 'start' : 'end')
@@ -206,4 +207,23 @@ function hideTooltips () {
   d3.event.currentTarget.style.fill = "steelblue";
   d3.event.currentTarget.style.cursor = "pointer";
   tooltip.style("opacity", 0) 
+}
+
+// Initialize and add the map
+function initMap() {
+  // The location of Uluru
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition( position => {
+      initMarker(position.coords.latitude, position.coords.longitude);
+    });
+  }
+}
+
+function initMarker(latitude, longitude) {
+  var mylocation = {lat: +latitude, lng: +longitude};
+  // The map, centered at Uluru
+  var map = new google.maps.Map(
+      document.getElementById('map'), {zoom: 8, center: mylocation});
+  // The marker, positioned at Uluru
+  var marker = new google.maps.Marker({position: mylocation, map: map});
 }
