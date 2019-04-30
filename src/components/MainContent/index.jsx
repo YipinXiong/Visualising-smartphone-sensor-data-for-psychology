@@ -177,6 +177,7 @@ class MainContent extends React.Component {
     .on("click", d => this.drawPieChart(d.date));
   };
   
+
   drawPieChart = date => {
     const width = this.width;
     const height = this.height;
@@ -271,34 +272,34 @@ class MainContent extends React.Component {
         }); 
     }
 
+      
+  showTooltips = d => {
+    d3.event.currentTarget.style.fill = "greenyellow";
+    this.tooltip.style("opacity", 1)
+            .style("left", d3.event.x - (this.tooltip.node().offsetWidth/2) + "px")
+            .style("top", d3.event.y + 30 + "px")
+            .html(`
+              <p>Date: ${d.date}</p>
+              <p>Frequencies: ${d.totalFreq}</p>
+            `);
+  };
 
 
-        
-    showTooltips = d => {
-      d3.event.currentTarget.style.fill = "greenyellow";
-      this.tooltip.style("opacity", 1)
-              .style("left", d3.event.x - (this.tooltip.node().offsetWidth/2) + "px")
-              .style("top", d3.event.y + 30 + "px")
-              .html(`
-                <p>Date: ${d.date}</p>
-                <p>Frequencies: ${d.totalFreq}</p>
-              `);
-    };
-
-    hideTooltips= () => { 
-      d3.event.currentTarget.style.fill = "steelblue";
-      d3.event.currentTarget.style.cursor = "pointer";
-      this.tooltip.style("opacity", 0) 
-    };
+  hideTooltips= () => { 
+    d3.event.currentTarget.style.fill = "steelblue";
+    d3.event.currentTarget.style.cursor = "pointer";
+    this.tooltip.style("opacity", 0) 
+  };
   
-    render () {
-      return (
-          <div id="svg-wrapper">
-            <svg id="freqDate"></svg>
-            <svg id="appDetails"></svg>
-          </div>
-      );
-    };
+  render () {
+    return (
+        <div id="svg-wrapper">
+          <svg id="freqDate"></svg>
+          <svg id="appDetails"></svg>
+        </div>
+    );
+  };
+  
 };
 
 export default MainContent;

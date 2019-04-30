@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>PatientsList</title>
+  <link rel="stylesheet" href="./patientslist.css"> 
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+</head>
+<body>
+  <div class="wrapper">
+    <main id="all-patients">
+        <div class="card">
+          <div class="card-body">
+            <a class="card-title" href="#">Patient Name</a>
+            <h6 class="card-subtitle mb-2 text-muted">Gender: Male</h6>
+            <h6 class="card-subtitle mb-2 text-muted">Age: 24</h6>
+            <p class="card-text">Description: Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+              <a class="card-title" href="#">Patient Name</a>
+              <h6 class="card-subtitle mb-2 text-muted">Gender: Male</h6>
+              <h6 class="card-subtitle mb-2 text-muted">Age: 24</h6>
+              <p class="card-text">Description: Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+          </div>        
+          <div class="card">
+              <div class="card-body">
+                <a class="card-title" href="#">Patient Name</a>
+                <h6 class="card-subtitle mb-2 text-muted">Gender: Male</h6>
+                <h6 class="card-subtitle mb-2 text-muted">Age: 24</h6>
+                <p class="card-text">Description: Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+              </div>
+            </div>
+    </main>
+    <header id="header" class="navbar navbar-dark bg-dark flex-md-nowrap p-2 shadow">
+      <a href="/" class="navbar-brand col-sm-3 col-md-2 mr-0">
+        Visual Psychology Data
+      </a>
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+  
+          {% if user.is_authenticated %}
+            <a href="/logout" class="btn btn-primary"> Sign Out </a>
+          {% else %}
+  
+            <button id="login_button" class="btn btn-primary"> Log In </button>
+          {% endif %}
+        </li>
+      </ul>
+    </header>
+  </div>
+
+</body>
+</html>

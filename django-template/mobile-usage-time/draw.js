@@ -1,12 +1,12 @@
-const width = 500;
-const height =300;
+const width = 550;
+const height =35np0;
 const padding = 80;
 
 const tooltip = d3.select("body")
                     .append("div")
                       .classed("tooltip", true);
 
-const svg = d3.select('svg')
+const svg = d3.select('#bar-chart')
                 .attr("width", width)
                 .attr("height", height);
 
@@ -15,8 +15,7 @@ const radius = Math.min(width, height)/2 - padding;
                  
 
 
-const pieSvg = d3.select("body")
-                  .append("svg")
+const pieSvg = d3.select("#pie-chart")
                     .attr("width", width)
                     .attr("height", height) 
                     .append("g")
@@ -116,7 +115,7 @@ function drawPieChart(date) {
         return 'translate(' + pos + ')';
       })
       .style('font-size', '13px')
-      .style('fill', d => pieColor(d.data.key))
+      .style('fill','black')
       .style('text-anchor', d => {
         let midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
         return (midangle < Math.PI ? 'start' : 'end')
