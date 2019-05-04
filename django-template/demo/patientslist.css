@@ -5,8 +5,17 @@
   font-family: Georgia, Times, 'Times New Roman', serif;
 }
 
+#search-patient {
+  position: fixed;
+  top: 70px;
+  left: 25vw;
+  width: 50vw;
+  z-index: 100;
+}
+
 .wrapper {
   display: flex;
+  position: relative;
   flex-direction: column;
   width: 100vw;
   height: 100vh;
@@ -27,7 +36,7 @@ header {
 }
 
 .card:hover {
-  transform: scale(1.1,1.1);
+  transform: scale(1.1, 1.1);
   transition-duration: 0.5s;
   box-shadow: 0 10px 6px -6px #777;
 }
@@ -48,7 +57,7 @@ header {
   overflow: scroll;
   height: 100vh;
   margin-top: -60px;
-  padding-top: 60px;
+  padding-top: 100px;
   position: relative;
   width: 100%;
   backface-visibility: hidden;
@@ -59,22 +68,22 @@ header {
 /* width */
 ::-webkit-scrollbar {
   width: 4px;
-  height:5px;
+  height: 5px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
- 
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2); 
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   height: 20px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555; 
+  background: #555;
 }
