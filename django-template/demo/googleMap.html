@@ -8,7 +8,8 @@
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 100%;
+        height: 50vh;
+        width: 50vw;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -16,10 +17,30 @@
         margin: 0;
         padding: 0;
       }
+
+      .wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .map-title {
+        font-weight: bold;
+        font-size: 2rem;
+        padding: 20px 0;
+      }
     </style>
   </head>
   <body>
-    <div id="map"></div>
+    <section class="wrapper">
+      <div class="map-title">The most frequently visited places</div>
+      <div id="map"></div>
+      <div id="infowindow-content">
+        <span id="place-name"  class="title"></span><br>
+        <span id="place-id"></span><br>
+        <span id="place-address"></span>
+      </div>
+    </section>
     <script>
     const locations = [
         {lat: -31.563910, lng: 147.154312},
@@ -45,17 +66,79 @@
         {lat: -42.734358, lng: 147.501315},
         {lat: -42.735258, lng: 147.438000},
         {lat: -43.999792, lng: 170.463352}
-      ]
+      ];
+    let map;
+    let infowindow;
+    let service;
+
     // Initialize and add the map
     function initMap() {
-      let map = new google.maps.Map(
-          document.getElementById('map'), {zoom: 4, center: {lat: -43.999792, lng: 170.463352}});
+      infowindow = new google.maps.InfoWindow();
+      let center = calCenter();
+      map = new google.maps.Map(document.getElementById('map'), {zoom: 4, center: center});
+      service = new google.maps.places.PlacesService(map);
       locations.forEach(location => {
-        let marker = new google.maps.Marker({position: location, map: map});
+        createMarker(location);
       });
     }
+
+    function createMarker(location) {
+      let marker = new google.maps.Marker({position: location, map: map});
+      new ClickEventHandler(marker, location);
+    }
+
+    class ClickEventHandler {
+      constructor(marker, location){
+        this.location = location;
+        this.marker = marker;
+        this.placesService = service;
+        this.infowindow = infowindow;
+        this.infowindowContent = document.getElementById('infowindow-content');
+        this.infowindow.setContent(this.infowindowContent);
+        this.marker.addListener('click', () => this.handleClick);
+      }
+
+      handleClick(event) {
+        console.log('You clicked on: ' + event.latLng);
+        // If the event has a placeId, use it.
+        if (event.placeId) {
+          console.log('You clicked on place:' + event.placeId);
+          // Calling e.stop() on the event prevents the default info window from
+          // showing.
+          // If you call stop here when there is no placeId you will prevent some
+          // other map click event handlers from receiving the event.
+          event.stop();
+          this.getPlaceInformation(event.placeId);
+        } 
+      }
+
+      getPlaceInformation(placeId) {
+        let me = this;
+        this.placesService.getDetails({placeId: placeId}, function(place, status) {
+          if (status === 'OK') {
+            me.infowindow.close();
+            me.infowindow.setPosition(place.geometry.location);
+            me.infowindowContent.children['place-name'].textContent = place.name;
+            me.infowindowContent.children['place-id'].textContent =`Place-id: ${place.place_id}`;
+            me.infowindowContent.children['place-address'].textContent =
+                place.formatted_address;
+            me.infowindow.open(me.marker);
+          }
+        });
+      }
+    }
+
+    function calCenter() {
+      let preCenter = locations.reduce(([latitude, longitude], currentLocation) =>
+         [latitude + currentLocation.lat, longitude + currentLocation.lng]
+      ,[0, 0]);
+      return {lat: preCenter[0]/locations.length, lng:preCenter[1]/locations.length};
+    }
+
+
+
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVZZVGG9W9UsAuhSQ89YzySBGhr6hkk7c&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVZZVGG9W9UsAuhSQ89YzySBGhr6hkk7c&libraries=places&callback=initMap"
     async defer></script>
   </body>
 </html>
