@@ -38,4 +38,31 @@
 #svg-wrapper {
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
+  align-content: center;
+}
+
+.svg-card {
+  box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
+  border-radius: 30px;
+  background: #fff;
+  padding: 0;
+}
+
+.svg-title {
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  padding-left: 50px;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  color: azure;
+  background: #343a40;
+}
+
+.diagram-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-content: center;
 }

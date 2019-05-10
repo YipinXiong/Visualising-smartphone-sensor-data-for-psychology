@@ -5,8 +5,8 @@ import './mainContent.css';
 class MainContent extends React.Component {
   constructor(props) {
     super(props);
-    this.width = 550;
-    this.height = 400;
+    this.width = 500;
+    this.height = 350;
     this.padding = 80;
     this.tooltip = d3.select('body').append("div").classed("tooltip", true);
     this.pieSvg = null;
@@ -97,16 +97,7 @@ class MainContent extends React.Component {
                       .attr("height", height)
                       .append("g")
                         .classed("date-pie-chart",true)
-                        .attr("transform", "translate(" + 600 / 2 + "," + 400 / 2 + ")");
-
-    this.pieSvg.append("text")
-      .attr("x", 0)
-      .attr("y", -(height-padding)/2)
-      .classed('pie-title',true)
-      .style("font-size", "1.5em")
-      .style("text-anchor", "middle")
-      .style("font-weight", "bold")
-      .text("")
+                        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
     const xScale = d3.scaleBand()
     .paddingInner(0.3)
@@ -136,15 +127,6 @@ class MainContent extends React.Component {
     svg.append('g')
     .attr('transform', `translate(${padding}, 0)`)
     .call(yAxis)
-
-
-    svg.append("text")
-    .attr("x", width/2)
-    .attr("y", 40)
-    .style("font-size", "1.5em")
-    .style("text-anchor", "middle")
-    .style("font-weight", "bold")
-    .text("Latest 7 days Screen Usage");
 
     svg.append("text")
     .attr("transform", "rotate(-90)")
@@ -189,7 +171,7 @@ class MainContent extends React.Component {
                         .domain(readyData.map(d => d.key))
                         .range(d3.schemeDark2);
 
-    d3.select('.pie-title').text(`${date}'s application-usage details`);
+    d3.select('.svg-title').html(`${date}'s application-usage details`);
 
     const pie = d3.pie()
                   .value(d => d.value)
@@ -294,8 +276,18 @@ class MainContent extends React.Component {
   render () {
     return (
         <div id="svg-wrapper">
-          <svg id="freqDate"></svg>
-          <svg id="appDetails"></svg>
+          <div class="svg-card">
+            <div class="svg-title">Latest 7 days Screen Usage</div>
+            <div class="diagram-wrapper">
+              <svg id="freqDate"></svg>
+            </div>
+          </div>
+          <div class="svg-card">
+            <div class="svg-title">Latest 7 days Screen Usage</div>
+            <div class="diagram-wrapper">
+              <svg id="appDetails"></svg>
+            </div>
+          </div>
         </div>
     );
   };

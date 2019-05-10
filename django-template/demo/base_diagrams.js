@@ -18,13 +18,10 @@ var radiusScale = d3.scaleLinear()
                     .domain(d3.extent(birthData2011, d => d.births))
                     .range([2, 40]);
 
-var xAxis = d3.axisBottom(xScale) 
-              .tickSize(-height + 2*padding)
-              .tickSizeOuter(0);
+var xAxis = d3.axisBottom(xScale);
 
-var yAxis = d3.axisLeft(yScale)
-              .tickSize(-width + 2*padding)
-              .tickSizeOuter(0);
+var yAxis = d3.axisLeft(yScale);
+              
 
 d3.select("svg")
     .append("g")
@@ -57,14 +54,14 @@ d3.select("svg")
     .style("text-anchor", "middle")
     .text("Births per Capita");
 
-d3.select("svg")
-  .append("text")
-    .attr("x", width/2)
-    .attr("y", padding)
-    .style("font-size", "1.5em")
-    .style("text-anchor", "middle")
-    .style("font-weight", "bold")
-    .text("Data on Births by Country in 2011");
+// d3.select("svg")
+//   .append("text")
+//     .attr("x", width/2)
+//     .attr("y", padding)
+//     .style("font-size", "1.5em")
+//     .style("text-anchor", "middle")
+//     .style("font-weight", "bold")
+//     .text("Data on Births by Country in 2011");
 
 d3.select("svg")
   .append("text")
