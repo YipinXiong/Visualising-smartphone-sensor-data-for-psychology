@@ -8,11 +8,13 @@
   <title>Document</title>
   <style>
     * {
-      font-family:'Times New Roman', Times, serif;
+      font-family: 'Times New Roman', Times, serif;
     }
+
     .axis {
       font: 10px sans-serif;
     }
+
     .axis path,
     .axis line {
       fill: none;
@@ -28,7 +30,7 @@
       border-radius: 5px;
       padding: 5px;
       font-size: 0.8rem;
-      border: 3px solid rgba(14, 13, 13); 
+      border: 3px solid rgba(14, 13, 13);
       background-color: aliceblue;
     }
 
@@ -37,46 +39,78 @@
     }
 
     .tooltip::before {
-      content:"";
+      content: "";
       position: absolute;
       border: 13px solid transparent;
-      border-bottom-color:rgba(14, 13, 13);
+      border-bottom-color: rgba(14, 13, 13);
       top: -27px;
       left: 50%;
-      margin-left: -6px; 
+      margin-left: -6px;
     }
 
-    #map {
-      height: 50vh;
-      width: 50vw;
-    }
-
-    #main-content-wrapper {
-      display: flex;
-      flex-direction: column;
-    }
 
     #svg-wrapper {
       display: flex;
       flex-direction: row;
+      justify-content: space-around;
+      align-content: center;
+      flex-wrap: wrap;
+    }
+
+    .svg-card {
+      box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);
+      border-radius: 30px;
+      background: #fff;
+      padding: 0;
+    }
+
+    .usage-title,
+    .pie-title {
+      border-top-left-radius: 30px;
+      border-top-right-radius: 30px;
+      padding-left: 50px;
+      height: 40px;
+      line-height: 40px;
+      color: azure;
+      background: #343a40;
+    }
+
+    .diagram-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+      align-content: center;
     }
   </style>
 
 </head>
 
 <body>
-  <div id="main-content-wrapper">
-    <div id="svg-wrapper">
-      <svg id="bar-chart"></svg>
-      <svg id="pie-chart"></svg>
+  <section id="svg-wrapper">
+    <div class="svg-card">
+      <div class="usage-title">Latest 7 days Screen Usage</div>
+      <div class="diagram-wrapper">
+        <svg id="freqDate"></svg>
+      </div>
     </div>
-    <div id="map">
+    <div class="svg-card">
+      <div class="pie-title">Date</div>
+      <div class="diagram-wrapper">
+        <svg id="appDetails">
+        </svg>
+      </div>
     </div>
-  </div>
+    <div class="svg-card">
+        <div class="-title">Date</div>
+        <div class="diagram-wrapper">
+          <svg id="appDetails">
+          </svg>
+        </div>
+      </div>
+  </section>
 </body>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="./data.js"></script>
 <script src="./draw.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVZZVGG9W9UsAuhSQ89YzySBGhr6hkk7c&callback=initMap"
-async defer></script>
+
 </html>
