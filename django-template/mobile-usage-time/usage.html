@@ -51,10 +51,9 @@
 
     #svg-wrapper {
       display: flex;
-      flex-direction: row;
+      flex-flow: row wrap;
       justify-content: space-around;
-      align-content: center;
-      flex-wrap: wrap;
+      align-content: space-between;
     }
 
     .svg-card {
@@ -62,10 +61,12 @@
       border-radius: 30px;
       background: #fff;
       padding: 0;
+      margin-top: 40px;
     }
 
     .usage-title,
-    .pie-title {
+    .pie-title,
+    .calling-title {
       border-top-left-radius: 30px;
       border-top-right-radius: 30px;
       padding-left: 50px;
@@ -81,8 +82,12 @@
       justify-content: space-around;
       align-content: center;
     }
-  </style>
 
+    .change-button {
+      margin: 10px;
+    }
+  </style>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
@@ -101,15 +106,20 @@
       </div>
     </div>
     <div class="svg-card">
-        <div class="-title">Date</div>
-        <div class="diagram-wrapper">
-          <svg id="appDetails">
-          </svg>
-        </div>
+      <div class="calling-title">Lastest 7 Day's Callings</div>
+      <div class="change-button">
+        <button onclick="updateCall('Received')" class="btn btn-light">Received</button>
+        <button onclick="updateCall('Sent')" class="btn btn-light">Sent</button>
       </div>
+      <div class="diagram-wrapper">
+        <svg id="callingDetails">
+        </svg>
+      </div>
+    </div>
   </section>
 </body>
 <script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
 <script src="./data.js"></script>
 <script src="./draw.js"></script>
 

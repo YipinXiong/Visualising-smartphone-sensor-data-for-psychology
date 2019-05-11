@@ -1253,36 +1253,3 @@ var birthData2011 = [{
   },
 ];
 
-const callings = [{
-  'date': '03-25',
-  'Received': 7,
-  'Sent': 4
-}, {
-  'date': '03-26',
-  'Received': 5,
-  'Sent': 1
-}, {
-  'date': '03-27',
-  'Received': 10,
-  'Sent': 4
-}, {
-  'date': '03-28',
-  'Received': 5,
-  'Sent': 2
-}, {
-  'date': '03-29',
-  'Received': 7,
-  'Sent': 2
-}, {
-  'date': '03-30',
-  'Received': 7,
-  'Sent': 4
-}, {
-  'date': '04-01',
-  'Received': 7,
-  'Sent': 4
-}, {
-  'date': '04-02',
-  'Received': 14,
-  'Sent': 4
-}]

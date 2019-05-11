@@ -18,12 +18,46 @@ const pieSvg = d3.select("#appDetails")
   .classed("date-pie-chart", true)
   .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-  //New ADD: initial text
+const callingSvg = d3.select("#callingDetails")
+  .attr("width", width)
+  .attr("height", height);
+
+//New ADD: initial text
 pieSvg.append("text")
-    .classed("initialText", true)
-    .style("text-anchor", "middle")
-    .style("font-weight","bold")
-    .text("Please select a date from the left side.")
+  .classed("initialText", true)
+  .style("text-anchor", "middle")
+  .style("font-weight", "bold")
+  .text("Please select a date from the left side.")
+
+function showTooltips(d) {
+  d3.event.currentTarget.style.fill = "greenyellow";
+  let temp = tooltip.style("opacity", 1)
+    .style("left", d3.event.x - (tooltip.node().offsetWidth / 2) + "px")
+    .style("top", d3.event.pageY + 30 + "px")
+  console.log(d3.event.pageY)
+  if (d.totalFreq) {
+    temp.html(`
+              <p>Date: ${d.date}</p>
+              <p>Frequencies: ${d.totalFreq}</p>
+            `);
+  } else if (d.Received) {
+    temp.html(`
+              <p>Date: ${d.date}</p>
+              <p>Received: ${d.Received}</p>
+            `);
+  } else {
+    temp.html(`
+      <p>Date: ${d.date}</p>
+      <p>Sent: ${d.Sent}</p>
+    `);
+  }
+}
+
+function hideTooltips() {
+  d3.event.currentTarget.style.fill = "steelblue";
+  d3.event.currentTarget.style.cursor = "pointer";
+  tooltip.style("opacity", 0)
+}
 
 function drawPieChart(date) {
   let data = psyData.filter(d => d.date === date)[0];
@@ -33,7 +67,7 @@ function drawPieChart(date) {
     .range(d3.schemeDark2);
 
   d3.select('.pie-title').text(`${date}'s application-usage details`);
-  
+
   const pie = d3.pie()
     .value(d => d.value)
     .sort(null);
@@ -52,9 +86,9 @@ function drawPieChart(date) {
   const arcsPieSvg = pieSvg.selectAll('.arc')
     .data(pie(readyData));
 
-    // new Added
-  d3.select(".initialText").remove();
-  
+  // new Added
+  d3.selectAll(".initialText").remove();
+
   arcsPieSvg.exit()
     .remove();
 
@@ -118,6 +152,62 @@ function drawPieChart(date) {
     });
 }
 
+// callings start
+
+// Initialize the X call axis
+const xCallScale = d3.scaleBand()
+  .paddingInner(0.3)
+  .paddingOuter(0.2)
+  .range([padding, width - padding]);
+
+const xCallAxis = callingSvg.append('g')
+  .attr('transform', `translate(0,${height - padding})`)
+
+xCallScale.domain(callings.map(d => d.date));
+xCallAxis.call(d3.axisBottom(xCallScale))
+  .selectAll("text")
+  .style("text-anchor", "end")
+  .attr("dx", "-.8em")
+  .attr("dy", "-.55em")
+  .attr("transform", "rotate(-60)");
+
+// Initialize the Y call axis
+const yCallScale = d3.scaleLinear()
+  .range([height - padding, padding]);
+
+const yCallAxis = callingSvg.append("g")
+  .attr("class", "myYaxis")
+  .attr('transform', `translate(${padding}, 0)`);
+
+function updateCall(key = 'Received') {
+  // update Y axis
+  d3.select('.calling-title').text(`Latest 7 days calls`)
+  yCallScale.domain([0, d3.max(callings, d => d[key])]);
+  yCallAxis.call(d3.axisLeft(yCallScale).ticks(4));
+  let u = callingSvg.selectAll("rect")
+    .classed(`call-${key.toLocaleLowerCase}`, true)
+    .data(callings.map( d => _.pick(d,['date', key] )));
+
+  u.exit()
+    .remove();
+  u.enter()
+    .append('rect')
+    .merge(u)
+    .on("mousemove", showTooltips)
+    .on("mouseout", hideTooltips)
+    .transition()
+    .duration(1000)
+    .attr("x", d => xCallScale(d.date))
+    .attr("y", d => yCallScale(d[key]))
+    .attr("width", xCallScale.bandwidth())
+    .attr("height", d => height - padding - yCallScale(d[key]))
+    .attr("fill", "steelblue")
+
+}
+
+updateCall();
+
+//callings end
 
 const xScale = d3.scaleBand()
   .paddingInner(0.3)
@@ -133,7 +223,6 @@ const xAxis = d3.axisBottom(xScale);
 
 const yAxis = d3.axisLeft(yScale)
   .ticks(4);
-
 
 svg.append("g")
   .attr('transform', `translate(0,${height - padding})`)
@@ -178,20 +267,3 @@ svg.append("g")
   .on("mousemove", showTooltips)
   .on("mouseout", hideTooltips)
   .on("click", d => drawPieChart(d.date));
-
-function showTooltips(d) {
-  d3.event.currentTarget.style.fill = "greenyellow";
-  tooltip.style("opacity", 1)
-    .style("left", d3.event.x - (tooltip.node().offsetWidth / 2) + "px")
-    .style("top", d3.event.y + 30 + "px")
-    .html(`
-            <p>Date: ${d.date}</p>
-            <p>Frequencies: ${d.totalFreq}</p>
-          `);
-}
-
-function hideTooltips() {
-  d3.event.currentTarget.style.fill = "steelblue";
-  d3.event.currentTarget.style.cursor = "pointer";
-  tooltip.style("opacity", 0)
-}
