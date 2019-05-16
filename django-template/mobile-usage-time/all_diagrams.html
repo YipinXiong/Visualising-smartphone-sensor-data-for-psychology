@@ -9,6 +9,9 @@
   <style>
     * {
       font-family: 'Times New Roman', Times, serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     .axis {
@@ -87,36 +90,59 @@
       margin: 10px;
     }
   </style>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="./metaDataBoard.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
-  <section id="svg-wrapper">
-    <div class="svg-card">
-      <div class="usage-title">Latest 7 days Screen Usage</div>
-      <div class="diagram-wrapper">
-        <svg id="freqDate"></svg>
+  <main>
+    <section class="jumbotron" id="metaDataArea">
+      <h1 class="user-meta display-4">
+        {{PatientName}}'s dashboard
+      </h1>
+      <hr class="my-5">
+      <div class="buttons-wrapper">
+        <div class="data-btns-wrapper">
+          <button class="btn btn-light" id="locationBtn">Locations</button>
+          <button class="btn btn-light" id="appBtn">Applications</button>
+          <button class="btn btn-light" id="textBtn">Messages</button>
+        </div>
+        <div class="time-btns-wrapper">
+          <button class="btn btn-light">Recent 7 days</button>
+          <button class="btn btn-light">Recent Month</button>
+        </div>
       </div>
-    </div>
-    <div class="svg-card">
-      <div class="pie-title">Date</div>
-      <div class="diagram-wrapper">
-        <svg id="appDetails">
-        </svg>
+    </section>
+
+    <section id="svg-wrapper">
+      <div class="svg-card">
+        <div class="usage-title">Latest 7 days Screen Usage</div>
+        <div class="diagram-wrapper">
+          <svg id="freqDate"></svg>
+        </div>
       </div>
-    </div>
-    <div class="svg-card">
-      <div class="calling-title">Lastest 7 Day's Callings</div>
-      <div class="change-button">
-        <button onclick="updateCall('Received')" class="btn btn-light">Received</button>
-        <button onclick="updateCall('Sent')" class="btn btn-light">Sent</button>
+      <div class="svg-card">
+        <div class="pie-title">Date</div>
+        <div class="diagram-wrapper">
+          <svg id="appDetails">
+          </svg>
+        </div>
       </div>
-      <div class="diagram-wrapper">
-        <svg id="callingDetails">
-        </svg>
+      <div class="svg-card">
+        <div class="calling-title">Lastest 7 Day's Callings</div>
+        <div class="change-button">
+          <button onclick="updateCall('Received')" class="btn btn-light">Received</button>
+          <button onclick="updateCall('Sent')" class="btn btn-light">Sent</button>
+        </div>
+        <div class="diagram-wrapper">
+          <svg id="callingDetails">
+          </svg>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
+
 </body>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>

@@ -1,0 +1,10 @@
+#metaDataArea {
+  background: #ffffff url("help.jpg") no-repeat left top;
+  background-size: cover;
+}
+
+.buttons-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
