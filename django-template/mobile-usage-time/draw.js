@@ -1,3 +1,25 @@
+let currentDataType = 'locations';
+let currentDataTime = 'week';
+
+//set click function based on the operation
+d3.selectAll('.data-pick').on('click', _ => {
+  currentDataType = d3.event.currentTarget.textContent.toLocaleLowerCase();
+  pickedTypeAndTime(currentDataType, currentDataTime);
+});
+
+d3.selectAll('.time-pick').on('click', _ => {
+  currentDataTime = d3.event.currentTarget.textContent.toLocaleLowerCase();
+  pickedTypeAndTime(currentDataType, currentDataTime);
+})
+
+function pickedTypeAndTime(dataType=currentDataType, dataTime=currentDataTime) {
+  //TODO: Based on the current data&type to draw the diagram and change url.
+  //TODO: fetch data asynchronously
+  //TODO: draw it out.
+}
+
+pickedTypeAndTime();
+
 const width = 500;
 const height = 350;
 const padding = 80;
@@ -34,7 +56,6 @@ function showTooltips(d) {
   let temp = tooltip.style("opacity", 1)
     .style("left", d3.event.x - (tooltip.node().offsetWidth / 2) + "px")
     .style("top", d3.event.pageY + 30 + "px")
-  console.log(d3.event.pageY)
   if (d.totalFreq) {
     temp.html(`
               <p>Date: ${d.date}</p>
@@ -186,7 +207,7 @@ function updateCall(key = 'Received') {
   yCallAxis.call(d3.axisLeft(yCallScale).ticks(4));
   let u = callingSvg.selectAll("rect")
     .classed(`call-${key.toLocaleLowerCase}`, true)
-    .data(callings.map( d => _.pick(d,['date', key] )));
+    .data(callings.map(d => _.pick(d, ['date', key])));
 
   u.exit()
     .remove();
