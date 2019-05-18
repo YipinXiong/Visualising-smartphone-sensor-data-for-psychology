@@ -1,5 +1,7 @@
-let currentDataType = 'applications';
-let currentDataTime = 'week';
+let currentDataType = 'applications',
+  currentDataTime = 'week',
+  currentMessageType = 'Received';
+
 const width = 500;
 const height = 350;
 const padding = 80;
@@ -13,7 +15,10 @@ const svg = d3.select('#mainSvg')
   .attr("height", height);
 
 let pieSvg;
-
+let xScale;
+let yScale;
+let xAxis;
+let yAxis;
 
 
 //set click function based on the operation
@@ -40,11 +45,19 @@ function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataTim
       break;
 
     case 'messages':
+      d3.selectAll('.svg-card').classed('hidden-element', false);
+      d3.select('.map-card').classed('hidden-element', true);
       d3.select('#mainSvgTitle').text(`Latest ${currentDataType} grouped by ${currentDataTime}`)
+      renderMessages();
       break;
 
     case 'applications':
       // history.pushState({}, 'patient-locations', '/applications');
+      if (!d3.select('.change-button').empty()) {
+        d3.selectAll('.change-button').selectAll("*").remove();
+        d3.selectAll('.change-button').remove();
+        svg.selectAll("*").remove();
+      }
       d3.select('#mainSvgTitle').text(`Latest ${currentDataTime} screen usage`)
       d3.selectAll('.svg-card').classed('hidden-element', false);
       d3.select('.map-card').classed('hidden-element', true);
@@ -52,6 +65,7 @@ function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataTim
         d3.select("#svg-wrapper")
           .append("div")
           .classed("svg-card", true)
+          .classed('appdetails', true)
           .html(`
             <div class="pie-title diagram-title">Date</div>
             <div class="diagram-wrapper">
@@ -72,19 +86,19 @@ function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataTim
           .style("font-weight", "bold")
           .text("Please select a date from the left side.")
 
-        const xScale = d3.scaleBand()
+        xScale = d3.scaleBand()
           .paddingInner(0.3)
           .paddingOuter(0.2)
           .domain(psyData.map(d => d.date))
           .range([padding, width - padding]);
 
-        const yScale = d3.scaleLinear()
+        yScale = d3.scaleLinear()
           .domain([0, d3.max(psyData, d => d.totalFreq)])
           .range([height - padding, padding]);
 
-        const xAxis = d3.axisBottom(xScale);
+        xAxis = d3.axisBottom(xScale);
 
-        const yAxis = d3.axisLeft(yScale)
+        yAxis = d3.axisLeft(yScale)
           .ticks(4);
 
         svg.append("g")
@@ -99,7 +113,6 @@ function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataTim
         svg.append('g')
           .attr('transform', `translate(${padding}, 0)`)
           .call(yAxis)
-
 
         svg.append("text")
           .attr("transform", "rotate(-90)")
@@ -132,33 +145,18 @@ function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataTim
           .on("click", d => drawPieChart(d.date));
       }
 
-
       //TODO: fetch data async based on currentTime
-      drawDiagramTypeTime(dataType, dataTime);
       break;
     default:
       // history.pushState({}, 'patient-locations', '/locations');
       d3.selectAll('.svg-card').classed('hidden-element', true);
       d3.select('.map-card').classed('hidden-element', false);
+
+
   }
 }
 
 pickedTypeAndTime();
-
-function drawDiagramTypeTime(type, time) {
-  switch (type) {
-    case 'applications':
-      console.log('object');
-    default:
-  }
-}
-
-
-const callingSvg = d3.select("#callingDetails")
-  .attr("width", width)
-  .attr("height", height);
-
-
 
 function showTooltips(d) {
   d3.event.currentTarget.style.fill = "greenyellow";
@@ -190,6 +188,7 @@ function hideTooltips() {
 }
 
 function drawPieChart(date) {
+
   let data = psyData.filter(d => d.date === date)[0];
   let readyData = d3.entries(data.app);
   const pieColor = d3.scaleOrdinal()
@@ -259,6 +258,7 @@ function drawPieChart(date) {
   const allLabels = pieSvg
     .selectAll('.arc-label')
     .data(pie(readyData));
+
   allLabels.exit().remove();
 
   allLabels
@@ -283,38 +283,57 @@ function drawPieChart(date) {
 
 
 // callings start
+function renderMessages() {
+  //remove all contents of the appended pie-chart.
+  let newSvg = d3.select(".appdetails");
+  if (!newSvg.empty()) {
+    newSvg.selectAll("*").remove();
+    newSvg.remove();
+    svg.selectAll("*").remove();
+  }
 
-// Initialize the X call axis
-const xCallScale = d3.scaleBand()
-  .paddingInner(0.3)
-  .paddingOuter(0.2)
-  .range([padding, width - padding]);
+  if (d3.select('.change-button').empty()) {
+    d3.select(".svg-card").append('div')
+      .classed('change-button', true)
+      .html(`
+    <button onclick="updateMessages('Received')" class="btn btn-light">Received</button>
+    <button onclick="updateMessages('Sent')" class="btn btn-light">Sent</button>
+    `);
+  }
 
-const xCallAxis = callingSvg.append('g')
-  .attr('transform', `translate(0,${height - padding})`)
+  // Initialize the X call axis
+  xScale = d3.scaleBand()
+    .paddingInner(0.3)
+    .paddingOuter(0.2)
+    .range([padding, width - padding]);
+  xAxis = svg.append('g')
+    .attr('transform', `translate(0,${height - padding})`)
+  xScale.domain(callings.map(d => d.date));
+  xAxis.call(d3.axisBottom(xScale))
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", "-.55em")
+    .attr("transform", "rotate(-60)");
 
-xCallScale.domain(callings.map(d => d.date));
-xCallAxis.call(d3.axisBottom(xCallScale))
-  .selectAll("text")
-  .style("text-anchor", "end")
-  .attr("dx", "-.8em")
-  .attr("dy", "-.55em")
-  .attr("transform", "rotate(-60)");
+  // Initialize the Y call axis
+  yScale = d3.scaleLinear()
+    .range([height - padding, padding]);
 
-// Initialize the Y call axis
-const yCallScale = d3.scaleLinear()
-  .range([height - padding, padding]);
+  yAxis = svg.append("g")
+    .attr("class", "myYaxis")
+    .attr('transform', `translate(${padding}, 0)`);
+  updateMessages();
+}
 
-const yCallAxis = callingSvg.append("g")
-  .attr("class", "myYaxis")
-  .attr('transform', `translate(${padding}, 0)`);
 
-function updateCall(key = 'Received') {
+function updateMessages(key = 'Received') {
   // update Y axis
-  d3.select('.calling-title').text(`Latest 7 days calls`)
-  yCallScale.domain([0, d3.max(callings, d => d[key])]);
-  yCallAxis.call(d3.axisLeft(yCallScale).ticks(4));
-  let u = callingSvg.selectAll("rect")
+  currentMessageType = key;
+  d3.select('#mainSvgTitle').text(`Latest ${currentDataTime} ${key} messages`)
+  yScale.domain([0, d3.max(callings, d => d[key])]);
+  yAxis.call(d3.axisLeft(yScale).ticks(4));
+  let u = svg.selectAll("rect")
     .classed(`call-${key.toLocaleLowerCase}`, true)
     .data(callings.map(d => _.pick(d, ['date', key])));
 
@@ -327,14 +346,9 @@ function updateCall(key = 'Received') {
     .on("mouseout", hideTooltips)
     .transition()
     .duration(1000)
-    .attr("x", d => xCallScale(d.date))
-    .attr("y", d => yCallScale(d[key]))
-    .attr("width", xCallScale.bandwidth())
-    .attr("height", d => height - padding - yCallScale(d[key]))
+    .attr("x", d => xScale(d.date))
+    .attr("y", d => yScale(d[key]))
+    .attr("width", xScale.bandwidth())
+    .attr("height", d => height - padding - yScale(d[key]))
     .attr("fill", "steelblue")
-
 }
-
-updateCall();
-
-//callings end
