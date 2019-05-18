@@ -1,5 +1,20 @@
-let currentDataType = 'locations';
+let currentDataType = 'applications';
 let currentDataTime = 'week';
+const width = 500;
+const height = 350;
+const padding = 80;
+const radius = Math.min(width, height) / 2 - padding;
+const tooltip = d3.select("body")
+  .append("div")
+  .classed("tooltip", true);
+
+const svg = d3.select('#mainSvg')
+  .attr("width", width)
+  .attr("height", height);
+
+let pieSvg;
+
+
 
 //set click function based on the operation
 d3.selectAll('.data-pick').on('click', _ => {
@@ -12,44 +27,138 @@ d3.selectAll('.time-pick').on('click', _ => {
   pickedTypeAndTime(currentDataType, currentDataTime);
 })
 
-function pickedTypeAndTime(dataType=currentDataType, dataTime=currentDataTime) {
-  //TODO: Based on the current data&type to draw the diagram and change url.
-  //TODO: fetch data asynchronously
-  //TODO: draw it out.
+//TODO: Based on the current data&type to draw the diagram and change url.
+//TODO: fetch data asynchronously
+//TODO: draw it out.
+
+function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataTime) {
+  // window.history.pushState({}, dataType, `/${dataType}`);
+  console.log(`DataType: ${dataType}
+  dataTime: ${dataTime}`);
+  switch (dataType) {
+    case 'callings':
+      break;
+
+    case 'messages':
+      d3.select('#mainSvgTitle').text(`Latest ${currentDataType} grouped by ${currentDataTime}`)
+      break;
+
+    case 'applications':
+      // history.pushState({}, 'patient-locations', '/applications');
+      d3.select('#mainSvgTitle').text(`Latest ${currentDataTime} screen usage`)
+      d3.selectAll('.svg-card').classed('hidden-element', false);
+      d3.select('.map-card').classed('hidden-element', true);
+      if (d3.select("#appDetails").empty()) {
+        d3.select("#svg-wrapper")
+          .append("div")
+          .classed("svg-card", true)
+          .html(`
+            <div class="pie-title diagram-title">Date</div>
+            <div class="diagram-wrapper">
+              <svg id="appDetails">
+              </svg>
+            </div>`);
+        pieSvg = d3.select("#appDetails")
+          .attr("width", width)
+          .attr("height", height)
+          .append("g")
+          .classed("date-pie-chart", true)
+          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+        //New ADD: initial text
+        pieSvg.append("text")
+          .classed("initialText", true)
+          .style("text-anchor", "middle")
+          .style("font-weight", "bold")
+          .text("Please select a date from the left side.")
+
+        const xScale = d3.scaleBand()
+          .paddingInner(0.3)
+          .paddingOuter(0.2)
+          .domain(psyData.map(d => d.date))
+          .range([padding, width - padding]);
+
+        const yScale = d3.scaleLinear()
+          .domain([0, d3.max(psyData, d => d.totalFreq)])
+          .range([height - padding, padding]);
+
+        const xAxis = d3.axisBottom(xScale);
+
+        const yAxis = d3.axisLeft(yScale)
+          .ticks(4);
+
+        svg.append("g")
+          .attr('transform', `translate(0,${height - padding})`)
+          .call(xAxis)
+          .selectAll("text")
+          .style("text-anchor", "end")
+          .attr("dx", "-.8em")
+          .attr("dy", "-.55em")
+          .attr("transform", "rotate(-60)");
+
+        svg.append('g')
+          .attr('transform', `translate(${padding}, 0)`)
+          .call(yAxis)
+
+
+        svg.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("x", -height / 2)
+          .attr("y", padding)
+          .attr("dy", "-3em")
+          .style("text-anchor", "middle")
+          .text("Frequency")
+
+        svg.append("text")
+          .attr("x", width / 2)
+          .attr("y", height - padding)
+          .attr("dy", "3em")
+          .style("text-anchor", "middle")
+          .text("Date");
+
+        svg.append("g")
+          .selectAll("rect")
+          .data(psyData)
+          .enter()
+          .append("rect")
+          .classed("bar", true)
+          .attr("x", d => xScale(d.date))
+          .attr("width", xScale.bandwidth())
+          .attr("y", d => yScale(d.totalFreq))
+          .attr("height", d => height - padding - yScale(d.totalFreq))
+          .attr("fill", "steelblue")
+          .on("mousemove", showTooltips)
+          .on("mouseout", hideTooltips)
+          .on("click", d => drawPieChart(d.date));
+      }
+
+
+      //TODO: fetch data async based on currentTime
+      drawDiagramTypeTime(dataType, dataTime);
+      break;
+    default:
+      // history.pushState({}, 'patient-locations', '/locations');
+      d3.selectAll('.svg-card').classed('hidden-element', true);
+      d3.select('.map-card').classed('hidden-element', false);
+  }
 }
 
 pickedTypeAndTime();
 
-const width = 500;
-const height = 350;
-const padding = 80;
-const tooltip = d3.select("body")
-  .append("div")
-  .classed("tooltip", true);
+function drawDiagramTypeTime(type, time) {
+  switch (type) {
+    case 'applications':
+      console.log('object');
+    default:
+  }
+}
 
-const svg = d3.select('#freqDate')
-  .attr("width", width)
-  .attr("height", height);
-
-const radius = Math.min(width, height) / 2 - padding;
-
-const pieSvg = d3.select("#appDetails")
-  .attr("width", width)
-  .attr("height", height)
-  .append("g")
-  .classed("date-pie-chart", true)
-  .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 const callingSvg = d3.select("#callingDetails")
   .attr("width", width)
   .attr("height", height);
 
-//New ADD: initial text
-pieSvg.append("text")
-  .classed("initialText", true)
-  .style("text-anchor", "middle")
-  .style("font-weight", "bold")
-  .text("Please select a date from the left side.")
+
 
 function showTooltips(d) {
   d3.event.currentTarget.style.fill = "greenyellow";
@@ -90,8 +199,7 @@ function drawPieChart(date) {
   d3.select('.pie-title').text(`${date}'s application-usage details`);
 
   const pie = d3.pie()
-    .value(d => d.value)
-    .sort(null);
+    .value(d => d.value);
 
   //The arc generator
   const arc = d3.arc()
@@ -173,6 +281,7 @@ function drawPieChart(date) {
     });
 }
 
+
 // callings start
 
 // Initialize the X call axis
@@ -229,62 +338,3 @@ function updateCall(key = 'Received') {
 updateCall();
 
 //callings end
-
-const xScale = d3.scaleBand()
-  .paddingInner(0.3)
-  .paddingOuter(0.2)
-  .domain(psyData.map(d => d.date))
-  .range([padding, width - padding]);
-
-const yScale = d3.scaleLinear()
-  .domain([0, d3.max(psyData, d => d.totalFreq)])
-  .range([height - padding, padding]);
-
-const xAxis = d3.axisBottom(xScale);
-
-const yAxis = d3.axisLeft(yScale)
-  .ticks(4);
-
-svg.append("g")
-  .attr('transform', `translate(0,${height - padding})`)
-  .call(xAxis)
-  .selectAll("text")
-  .style("text-anchor", "end")
-  .attr("dx", "-.8em")
-  .attr("dy", "-.55em")
-  .attr("transform", "rotate(-60)");
-
-svg.append('g')
-  .attr('transform', `translate(${padding}, 0)`)
-  .call(yAxis)
-
-
-svg.append("text")
-  .attr("transform", "rotate(-90)")
-  .attr("x", -height / 2)
-  .attr("y", padding)
-  .attr("dy", "-3em")
-  .style("text-anchor", "middle")
-  .text("Frequency")
-
-svg.append("text")
-  .attr("x", width / 2)
-  .attr("y", height - padding)
-  .attr("dy", "3em")
-  .style("text-anchor", "middle")
-  .text("Date");
-
-svg.append("g")
-  .selectAll("rect")
-  .data(psyData)
-  .enter()
-  .append("rect")
-  .classed("bar", true)
-  .attr("x", d => xScale(d.date))
-  .attr("width", xScale.bandwidth())
-  .attr("y", d => yScale(d.totalFreq))
-  .attr("height", d => height - padding - yScale(d.totalFreq))
-  .attr("fill", "steelblue")
-  .on("mousemove", showTooltips)
-  .on("mouseout", hideTooltips)
-  .on("click", d => drawPieChart(d.date));

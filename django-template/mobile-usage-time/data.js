@@ -7,7 +7,8 @@
           "twitter": 800,
           "whatsapp": 50,
           "youtube": 300
-        }
+        },
+      "mostFreqTime": 'morning'
     },
     { 
       "date": "04/04",

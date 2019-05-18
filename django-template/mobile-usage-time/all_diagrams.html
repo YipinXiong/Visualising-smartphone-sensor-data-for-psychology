@@ -52,27 +52,37 @@
     }
 
 
+    #map {
+      height: 50vh;
+      width: 50vw;
+
+    }
+
+    #main-content-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
     #svg-wrapper {
       display: flex;
       flex-flow: row wrap;
       justify-content: space-around;
-      align-content: space-between;
+      align-content: space-around;
     }
 
-    .svg-card {
+    .svg-card,
+    .map-card {
       box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);
       border-radius: 30px;
       background: #fff;
       padding: 0;
-      margin-top: 40px;
     }
 
-    .usage-title,
-    .pie-title,
-    .calling-title {
+    .diagram-title {
       border-top-left-radius: 30px;
       border-top-right-radius: 30px;
       padding-left: 50px;
+      width: 100%;
       height: 40px;
       line-height: 40px;
       color: azure;
@@ -88,6 +98,18 @@
 
     .change-button {
       margin: 10px;
+    }
+
+    .map-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-content: center;
+      margin-top: 50px;
+    }
+
+    .hidden-element {
+      display: none;
     }
   </style>
   <link rel="stylesheet" href="./metaDataBoard.css">
@@ -107,6 +129,7 @@
           <button class="btn btn-light data-pick" id="locationBtn">Locations</button>
           <button class="btn btn-light data-pick" id="appBtn">Applications</button>
           <button class="btn btn-light data-pick" id="textBtn">Messages</button>
+          <button class="btn btn-light data-pick" id="textBtn">Callings</button>
         </div>
         <div class="time-btns-wrapper">
           <button class="btn btn-light time-pick">Week</button>
@@ -117,20 +140,14 @@
 
     <section id="svg-wrapper">
       <div class="svg-card">
-        <div class="usage-title">Latest 7 days Screen Usage</div>
+        <div id="mainSvgTitle" class="diagram-title"></div>
         <div class="diagram-wrapper">
-          <svg id="freqDate"></svg>
+          <svg id="mainSvg"></svg>
         </div>
       </div>
+      <!--
       <div class="svg-card">
-        <div class="pie-title">Date</div>
-        <div class="diagram-wrapper">
-          <svg id="appDetails">
-          </svg>
-        </div>
-      </div>
-      <div class="svg-card">
-        <div class="calling-title">Lastest 7 Day's Callings</div>
+        <div class="calling-diagram-title">Lastest 7 Day's Text Messages</div>
         <div class="change-button">
           <button onclick="updateCall('Received')" class="btn btn-light">Received</button>
           <button onclick="updateCall('Sent')" class="btn btn-light">Sent</button>
@@ -139,12 +156,28 @@
           <svg id="callingDetails">
           </svg>
         </div>
+      </div> -->
+    </section>
+    <section class="map-wrapper">
+      <div class="map-card">
+        <div class="diagram-title">The most frequent visited places</div>
+        <div id="map"></div>
       </div>
     </section>
+    <div id="infowindow-content">
+      <span id="place-name" class="title"></span><br>
+      <span id="place-id"></span><br>
+      <span id="place-address"></span>
+    </div>
   </main>
 
 </body>
 <script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+<script src="./locations.js"></script>
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVZZVGG9W9UsAuhSQ89YzySBGhr6hkk7c&libraries=places&callback=initMap"
+  async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
 <script src="./data.js"></script>
 <script src="./draw.js"></script>
