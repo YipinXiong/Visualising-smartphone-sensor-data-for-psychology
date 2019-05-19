@@ -300,13 +300,24 @@ function renderMessages() {
     <button onclick="updateMessages('Sent')" class="btn btn-light">Sent</button>
     `);
   }
+  updateMessages();
+}
 
+
+function updateMessages(key = 'Received') {
+  // update Y axis
+  currentMessageType = key;
+  d3.select('#mainSvgTitle').text(`Latest ${currentDataTime} ${currentMessageType} Messages`)
+  // remove the old axes.
+  d3.selectAll('g.x-axis').remove();
+  d3.selectAll('g.y-axis').remove();
   // Initialize the X call axis
   xScale = d3.scaleBand()
     .paddingInner(0.3)
     .paddingOuter(0.2)
     .range([padding, width - padding]);
   xAxis = svg.append('g')
+    .classed('x-axis', true)
     .attr('transform', `translate(0,${height - padding})`)
   xScale.domain(callings.map(d => d.date));
   xAxis.call(d3.axisBottom(xScale))
@@ -319,24 +330,14 @@ function renderMessages() {
   // Initialize the Y call axis
   yScale = d3.scaleLinear()
     .range([height - padding, padding]);
-
   yAxis = svg.append("g")
-    .attr("class", "myYaxis")
+    .classed("y-axis", true)
     .attr('transform', `translate(${padding}, 0)`);
-  updateMessages();
-}
-
-
-function updateMessages(key = 'Received') {
-  // update Y axis
-  currentMessageType = key;
-  d3.select('#mainSvgTitle').text(`Latest ${currentDataTime} ${key} messages`)
   yScale.domain([0, d3.max(callings, d => d[key])]);
   yAxis.call(d3.axisLeft(yScale).ticks(4));
   let u = svg.selectAll("rect")
-    .classed(`call-${key.toLocaleLowerCase}`, true)
+    .classed(`message-${key.toLocaleLowerCase}`, true)
     .data(callings.map(d => _.pick(d, ['date', key])));
-
   u.exit()
     .remove();
   u.enter()
