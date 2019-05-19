@@ -6,6 +6,8 @@ const width = 500;
 const height = 350;
 const padding = 80;
 const radius = Math.min(width, height) / 2 - padding;
+const legendWidth = 12;
+
 const tooltip = d3.select("body")
   .append("div")
   .classed("tooltip", true);
@@ -33,7 +35,7 @@ d3.selectAll('.time-pick').on('click', _ => {
 })
 
 //TODO: Based on the current data&type to draw the diagram and change url.
-//TODO: fetch data asynchronously
+//TODO: fetch data asynchronously.
 //TODO: draw it out.
 
 function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataTime) {
@@ -62,87 +64,7 @@ function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataTim
       d3.selectAll('.svg-card').classed('hidden-element', false);
       d3.select('.map-card').classed('hidden-element', true);
       if (d3.select("#appDetails").empty()) {
-        d3.select("#svg-wrapper")
-          .append("div")
-          .classed("svg-card", true)
-          .classed('appdetails', true)
-          .html(`
-            <div class="pie-title diagram-title">Date</div>
-            <div class="diagram-wrapper">
-              <svg id="appDetails">
-              </svg>
-            </div>`);
-        pieSvg = d3.select("#appDetails")
-          .attr("width", width)
-          .attr("height", height)
-          .append("g")
-          .classed("date-pie-chart", true)
-          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-        //New ADD: initial text
-        pieSvg.append("text")
-          .classed("initialText", true)
-          .style("text-anchor", "middle")
-          .style("font-weight", "bold")
-          .text("Please select a date from the left side.")
-
-        xScale = d3.scaleBand()
-          .paddingInner(0.3)
-          .paddingOuter(0.2)
-          .domain(psyData.map(d => d.date))
-          .range([padding, width - padding]);
-
-        yScale = d3.scaleLinear()
-          .domain([0, d3.max(psyData, d => d.totalFreq)])
-          .range([height - padding, padding]);
-
-        xAxis = d3.axisBottom(xScale);
-
-        yAxis = d3.axisLeft(yScale)
-          .ticks(4);
-
-        svg.append("g")
-          .attr('transform', `translate(0,${height - padding})`)
-          .call(xAxis)
-          .selectAll("text")
-          .style("text-anchor", "end")
-          .attr("dx", "-.8em")
-          .attr("dy", "-.55em")
-          .attr("transform", "rotate(-60)");
-
-        svg.append('g')
-          .attr('transform', `translate(${padding}, 0)`)
-          .call(yAxis)
-
-        svg.append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("x", -height / 2)
-          .attr("y", padding)
-          .attr("dy", "-3em")
-          .style("text-anchor", "middle")
-          .text("Frequency")
-
-        svg.append("text")
-          .attr("x", width / 2)
-          .attr("y", height - padding)
-          .attr("dy", "3em")
-          .style("text-anchor", "middle")
-          .text("Date");
-
-        svg.append("g")
-          .selectAll("rect")
-          .data(psyData)
-          .enter()
-          .append("rect")
-          .classed("bar", true)
-          .attr("x", d => xScale(d.date))
-          .attr("width", xScale.bandwidth())
-          .attr("y", d => yScale(d.totalFreq))
-          .attr("height", d => height - padding - yScale(d.totalFreq))
-          .attr("fill", "steelblue")
-          .on("mousemove", showTooltips)
-          .on("mouseout", hideTooltips)
-          .on("click", d => drawPieChart(d.date));
+        drawAppDiagram();
       }
 
       //TODO: fetch data async based on currentTime
@@ -157,6 +79,90 @@ function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataTim
 }
 
 pickedTypeAndTime();
+
+function drawAppDiagram() {
+  d3.select("#svg-wrapper")
+    .append("div")
+    .classed("svg-card", true)
+    .classed('appdetails', true)
+    .html(`
+    <div class="pie-title diagram-title">Date</div>
+    <div class="diagram-wrapper">
+      <svg id="appDetails">
+      </svg>
+    </div>`);
+  pieSvg = d3.select("#appDetails")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .classed("date-pie-chart", true)
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+  //New ADD: initial text
+  pieSvg.append("text")
+    .classed("initialText", true)
+    .style("text-anchor", "middle")
+    .style("font-weight", "bold")
+    .text("Please select a date from the left side.")
+
+  xScale = d3.scaleBand()
+    .paddingInner(0.3)
+    .paddingOuter(0.2)
+    .domain(psyData.map(d => d.date))
+    .range([padding, width - padding]);
+
+  yScale = d3.scaleLinear()
+    .domain([0, d3.max(psyData, d => d.totalFreq)])
+    .range([height - padding, padding]);
+
+  xAxis = d3.axisBottom(xScale);
+
+  yAxis = d3.axisLeft(yScale)
+    .ticks(4);
+
+  svg.append("g")
+    .attr('transform', `translate(0,${height - padding})`)
+    .call(xAxis)
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", "-.55em")
+    .attr("transform", "rotate(-60)");
+
+  svg.append('g')
+    .attr('transform', `translate(${padding}, 0)`)
+    .call(yAxis)
+
+  svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height / 2)
+    .attr("y", padding)
+    .attr("dy", "-3em")
+    .style("text-anchor", "middle")
+    .text("Frequency")
+
+  svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", height - padding)
+    .attr("dy", "3em")
+    .style("text-anchor", "middle")
+    .text("Date");
+
+  svg.append("g")
+    .selectAll("rect")
+    .data(psyData)
+    .enter()
+    .append("rect")
+    .classed("bar", true)
+    .attr("x", d => xScale(d.date))
+    .attr("width", xScale.bandwidth())
+    .attr("y", d => yScale(d.totalFreq))
+    .attr("height", d => height - padding - yScale(d.totalFreq))
+    .attr("fill", "steelblue")
+    .on("mousemove", showTooltips)
+    .on("mouseout", hideTooltips)
+    .on("click", d => drawPieChart(d.date));
+}
 
 function showTooltips(d) {
   d3.event.currentTarget.style.fill = "greenyellow";
@@ -196,32 +202,24 @@ function drawPieChart(date) {
     .range(d3.schemeDark2);
 
   d3.select('.pie-title').text(`${date}'s application-usage details`);
+  d3.selectAll(".initialText").remove();
 
   const pie = d3.pie()
     .value(d => d.value);
 
   //The arc generator
   const arc = d3.arc()
-    .innerRadius(radius * 0.5)
-    .outerRadius(radius * 0.8);
-
-  //label positionning arc
-  const labelArc = d3.arc()
-    .innerRadius(radius * 0.9)
-    .outerRadius(radius * 0.9);
+    .innerRadius(radius * 0.7)
+    .outerRadius(radius * 1.2);
 
   // update arc data
   const arcsPieSvg = pieSvg.selectAll('.arc')
     .data(pie(readyData));
-
   // new Added
-  d3.selectAll(".initialText").remove();
-
   arcsPieSvg.exit()
     .remove();
 
-  arcsPieSvg
-    .enter()
+  arcsPieSvg.enter()
     .append('path')
     .merge(arcsPieSvg)
     .classed("arc", true)
@@ -231,54 +229,31 @@ function drawPieChart(date) {
     .style('stroke-width', '2px')
     .style('opacity', 0.7);
 
-  // add and update the polylines between chart and labels
-  const allPolylines = pieSvg.selectAll('.polyline')
-    .data(pie(readyData));
+  //update legend
+  const legendRect = d3.select("#appDetails").selectAll(".legend-rect").data(pie(readyData));
+  const legendText = d3.select("#appDetails").selectAll('.legend-text').data(pie(readyData));
 
-  allPolylines.exit()
-    .remove();
+  // update legend size pattern
+  legendRect.exit().remove();
 
-  allPolylines
-    .enter()
-    .append('polyline')
-    .merge(allPolylines)
-    .classed('polyline', true)
-    .attr("stroke", d => pieColor(d.data.key))
-    .style('fill', 'none')
-    .style('stroke-width', 1)
-    .attr('points', d => {
-      let posA = arc.centroid(d) // line insertion in the slice
-      let posB = labelArc.centroid(d) // line break: we use the other arc generator that has been built only for that
-      let posC = labelArc.centroid(d); // Label position = almost the same as posB
-      let midangle = d.startAngle + (d.endAngle - d.startAngle) / 2 // we need the angle to see if the X position will be at the extreme right or extreme left
-      posC[0] = radius * 0.95 * (midangle < Math.PI ? 1 : -1); // multiply by 1 or -1 to put it on the right or on the left
-      return [posA, posB, posC]
-    });
+  legendRect.enter()
+    .append('rect')
+    .merge(legendRect)
+    .attr("width", legendWidth)
+    .attr("height", legendWidth)
+    .attr("fill", d => pieColor(d.data.key))
+    .attr("transform", (d, i) => `translate(${width - 1.5*padding}, ${(i * 20 + 20)})`)
+    .classed("legend-rect", true);
 
-  const allLabels = pieSvg
-    .selectAll('.arc-label')
-    .data(pie(readyData));
-
-  allLabels.exit().remove();
-
-  allLabels
-    .enter()
-    .append('text')
-    .merge(allLabels)
-    .classed('arc-label', true)
+  legendText.exit().remove();
+  legendText.enter()
+    .append("text")
+    .merge(legendText)
+    .classed('legend-text', true)
     .text(d => d.data.key)
-    .attr('transform', d => {
-      let pos = labelArc.centroid(d);
-      let midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
-      pos[0] = radius * 0.99 * (midangle < Math.PI ? 1 : -1);
-      return 'translate(' + pos + ')';
-    })
-    .style('font-size', '18px')
-    .style('fill', 'black')
-    .style('text-anchor', d => {
-      let midangle = d.startAngle + (d.endAngle - d.startAngle) / 2
-      return (midangle < Math.PI ? 'start' : 'end')
-    });
+    .style("font-size", 16)
+    .attr("y", (d, i) => i * 20 + 20 + legendWidth)
+    .attr("x", width - 1.2*padding);
 }
 
 
@@ -309,8 +284,8 @@ function updateMessages(key = 'Received') {
   currentMessageType = key;
   d3.select('#mainSvgTitle').text(`Latest ${currentDataTime} ${currentMessageType} Messages`)
   // remove the old axes.
-  d3.selectAll('g.x-axis').remove();
-  d3.selectAll('g.y-axis').remove();
+  d3.select('g.x-axis').remove();
+  d3.select('g.y-axis').remove();
   // Initialize the X call axis
   xScale = d3.scaleBand()
     .paddingInner(0.3)
@@ -319,7 +294,7 @@ function updateMessages(key = 'Received') {
   xAxis = svg.append('g')
     .classed('x-axis', true)
     .attr('transform', `translate(0,${height - padding})`)
-  xScale.domain(callings.map(d => d.date));
+  xScale.domain(messages.map(d => d.date));
   xAxis.call(d3.axisBottom(xScale))
     .selectAll("text")
     .style("text-anchor", "end")
@@ -333,11 +308,11 @@ function updateMessages(key = 'Received') {
   yAxis = svg.append("g")
     .classed("y-axis", true)
     .attr('transform', `translate(${padding}, 0)`);
-  yScale.domain([0, d3.max(callings, d => d[key])]);
+  yScale.domain([0, d3.max(messages, d => d[key])]);
   yAxis.call(d3.axisLeft(yScale).ticks(4));
   let u = svg.selectAll("rect")
     .classed(`message-${key.toLocaleLowerCase}`, true)
-    .data(callings.map(d => _.pick(d, ['date', key])));
+    .data(messages.map(d => _.pick(d, ['date', key])));
   u.exit()
     .remove();
   u.enter()

@@ -70,7 +70,7 @@
     }
   ]
 
-  const callings = [{
+  const messages = [{
     'date': '03-25',
     'Received': 7,
     'Sent': 2
