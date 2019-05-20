@@ -5,12 +5,30 @@ let map;
 let infowindow;
 let service;
 let currentMarkers = [];
-
 const width = 500;
 const height = 350;
 const padding = 80;
 const radius = Math.min(width, height) / 2 - padding;
 const legendWidth = 12;
+const switchHandler = {
+  'callings': {
+    'week': () => console.log('callingsWeekhandler'),
+    'month': 'monthdata'
+  },
+  'messages': {
+    'week': () => messageHandler(messages),
+    'month': () => messageHandler(messages)
+  },
+  'applications': {
+    'week': () => applicationHandler(psyData),
+    'month': () => applicationHandler(psyData)
+  },
+  'locations': {
+    'week': () => locationHandler(locations),
+    'month': () => locationHandler(locations)
+  }
+};
+
 
 const tooltip = d3.select("body")
   .append("div")
@@ -41,39 +59,7 @@ d3.selectAll('.time-pick').on('click', _ => {
 function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataSpan) {
   console.log(`DataType: ${dataType}
   dataTime: ${dataTime}`);
-  switch (dataType) {
-    case 'callings':
-      break;
-
-    case 'messages':
-      if (currentDataSpan === 'week') {
-        messageHandler(messages);
-      } else {
-        console.log('monthMessages')
-        messageHandler(messages);
-      }
-      break;
-
-    case 'applications':
-      // history.pushState({}, 'patient-locations', '/applications');
-      if (currentDataSpan === 'week') {
-        applicationHandler(psyData);
-      } else {
-        console.log('monthPsyData');
-        applicationHandler(psyData);
-      }
-      break;
-    default:
-      // history.pushState({}, 'patient-locations', '/locations');
-      if (currentDataSpan === 'week') {
-        console.log('week locations');
-        locationHandler(locations);
-      } else {
-        console.log('month locations');
-        locationHandler(locations);
-      }
-
-  }
+  switchHandler[currentDataType][currentDataSpan]();
 }
 
 pickedTypeAndTime();
@@ -376,15 +362,6 @@ function initMap() {
     center: center
   });
   service = new google.maps.places.PlacesService(map);
-  // if (currentDataSpan === 'week') {
-  //   locations.forEach(location => {
-  //     currentMarkers.push(createMarker(location));
-  //   });
-  // } else {
-  //   locations.forEach(location => {
-  //     currentMarkers.push(createMarker(location));
-  //   });
-  // }
 }
 
 function createMarker(location) {
