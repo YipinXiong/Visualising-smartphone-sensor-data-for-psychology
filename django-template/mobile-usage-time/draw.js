@@ -1,6 +1,10 @@
 let currentDataType = 'applications',
-  currentDataTime = 'week',
+  currentDataSpan = 'week',
   currentMessageType = 'Received';
+let map;
+let infowindow;
+let service;
+let currentMarkers = [];
 
 const width = 500;
 const height = 350;
@@ -26,20 +30,15 @@ let yAxis;
 //set click function based on the operation
 d3.selectAll('.data-pick').on('click', _ => {
   currentDataType = d3.event.currentTarget.textContent.toLocaleLowerCase();
-  pickedTypeAndTime(currentDataType, currentDataTime);
+  pickedTypeAndTime(currentDataType, currentDataSpan);
 });
 
 d3.selectAll('.time-pick').on('click', _ => {
-  currentDataTime = d3.event.currentTarget.textContent.toLocaleLowerCase();
-  pickedTypeAndTime(currentDataType, currentDataTime);
+  currentDataSpan = d3.event.currentTarget.textContent.toLocaleLowerCase();
+  pickedTypeAndTime(currentDataType, currentDataSpan);
 })
 
-//TODO: Based on the current data&type to draw the diagram and change url.
-//TODO: fetch data asynchronously.
-//TODO: draw it out.
-
-function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataTime) {
-  // window.history.pushState({}, dataType, `/${dataType}`);
+function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataSpan) {
   console.log(`DataType: ${dataType}
   dataTime: ${dataTime}`);
   switch (dataType) {
@@ -47,40 +46,75 @@ function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataTim
       break;
 
     case 'messages':
-      d3.selectAll('.svg-card').classed('hidden-element', false);
-      d3.select('.map-card').classed('hidden-element', true);
-      d3.select('#mainSvgTitle').text(`Latest ${currentDataType} grouped by ${currentDataTime}`)
-      renderMessages();
+      if (currentDataSpan === 'week') {
+        messageHandler(messages);
+      } else {
+        console.log('monthMessages')
+        messageHandler(messages);
+      }
       break;
 
     case 'applications':
       // history.pushState({}, 'patient-locations', '/applications');
-      if (!d3.select('.change-button').empty()) {
-        d3.selectAll('.change-button').selectAll("*").remove();
-        d3.selectAll('.change-button').remove();
-        svg.selectAll("*").remove();
+      if (currentDataSpan === 'week') {
+        applicationHandler(psyData);
+      } else {
+        console.log('monthPsyData');
+        applicationHandler(psyData);
       }
-      d3.select('#mainSvgTitle').text(`Latest ${currentDataTime} screen usage`)
-      d3.selectAll('.svg-card').classed('hidden-element', false);
-      d3.select('.map-card').classed('hidden-element', true);
-      if (d3.select("#appDetails").empty()) {
-        drawAppDiagram();
-      }
-
-      //TODO: fetch data async based on currentTime
       break;
     default:
       // history.pushState({}, 'patient-locations', '/locations');
-      d3.selectAll('.svg-card').classed('hidden-element', true);
-      d3.select('.map-card').classed('hidden-element', false);
-
+      if (currentDataSpan === 'week') {
+        console.log('week locations');
+        locationHandler(locations);
+      } else {
+        console.log('month locations');
+        locationHandler(locations);
+      }
 
   }
 }
 
 pickedTypeAndTime();
 
-function drawAppDiagram() {
+function locationHandler(locations) {
+  if (currentMarkers.length) {
+    clearMarkers();
+  }
+  currentMarkers = [];
+  locations.forEach(location => {
+    currentMarkers.push(createMarker(location));
+  });
+  showMarkers();
+
+  d3.selectAll('.svg-card').classed('hidden-element', true);
+  d3.select('.map-card').classed('hidden-element', false);
+
+}
+
+function messageHandler(messages) {
+  d3.selectAll('.svg-card').classed('hidden-element', false);
+  d3.select('.map-card').classed('hidden-element', true);
+  d3.select('#mainSvgTitle').text(`Latest ${currentDataType} grouped by ${currentDataSpan}`)
+  renderMessages(messages);
+}
+
+function applicationHandler(psyData) {
+  if (!d3.select('.change-button').empty()) {
+    d3.selectAll('.change-button').selectAll("*").remove();
+    d3.selectAll('.change-button').remove();
+    svg.selectAll("*").remove();
+  }
+  d3.select('#mainSvgTitle').text(`Latest ${currentDataSpan} screen usage`)
+  d3.selectAll('.svg-card').classed('hidden-element', false);
+  d3.select('.map-card').classed('hidden-element', true);
+  if (d3.select("#appDetails").empty()) {
+    drawAppDiagram(psyData);
+  }
+}
+
+function drawAppDiagram(psyData) {
   d3.select("#svg-wrapper")
     .append("div")
     .classed("svg-card", true)
@@ -91,6 +125,7 @@ function drawAppDiagram() {
       <svg id="appDetails">
       </svg>
     </div>`);
+
   pieSvg = d3.select("#appDetails")
     .attr("width", width)
     .attr("height", height)
@@ -161,7 +196,7 @@ function drawAppDiagram() {
     .attr("fill", "steelblue")
     .on("mousemove", showTooltips)
     .on("mouseout", hideTooltips)
-    .on("click", d => drawPieChart(d.date));
+    .on("click", d => drawPieChart(d.date, psyData));
 }
 
 function showTooltips(d) {
@@ -193,7 +228,7 @@ function hideTooltips() {
   tooltip.style("opacity", 0)
 }
 
-function drawPieChart(date) {
+function drawPieChart(date, psyData) {
 
   let data = psyData.filter(d => d.date === date)[0];
   let readyData = d3.entries(data.app);
@@ -253,12 +288,12 @@ function drawPieChart(date) {
     .text(d => d.data.key)
     .style("font-size", 16)
     .attr("y", (d, i) => i * 20 + 20 + legendWidth)
-    .attr("x", width - 1.2*padding);
+    .attr("x", width - 1.2 * padding);
 }
 
 
-// callings start
-function renderMessages() {
+
+function renderMessages(messages) {
   //remove all contents of the appended pie-chart.
   let newSvg = d3.select(".appdetails");
   if (!newSvg.empty()) {
@@ -271,18 +306,20 @@ function renderMessages() {
     d3.select(".svg-card").append('div')
       .classed('change-button', true)
       .html(`
-    <button onclick="updateMessages('Received')" class="btn btn-light">Received</button>
-    <button onclick="updateMessages('Sent')" class="btn btn-light">Sent</button>
+    <button class="btn btn-light message-btn">Received</button>
+    <button class="btn btn-light message-btn">Sent</button>
     `);
+    d3.selectAll('.message-btn').on('click', _ => updateMessages(d3.event.currentTarget.textContent, messages));
   }
-  updateMessages();
+
+  updateMessages(currentMessageType, messages);
 }
 
 
-function updateMessages(key = 'Received') {
+function updateMessages(key = 'Received', messages) {
   // update Y axis
   currentMessageType = key;
-  d3.select('#mainSvgTitle').text(`Latest ${currentDataTime} ${currentMessageType} Messages`)
+  d3.select('#mainSvgTitle').text(`Latest ${currentDataSpan} ${currentMessageType} Messages`)
   // remove the old axes.
   d3.select('g.x-axis').remove();
   d3.select('g.y-axis').remove();
@@ -327,4 +364,106 @@ function updateMessages(key = 'Received') {
     .attr("width", xScale.bandwidth())
     .attr("height", d => height - padding - yScale(d[key]))
     .attr("fill", "steelblue")
+}
+
+
+// Initialize and add the map
+function initMap() {
+  infowindow = new google.maps.InfoWindow();
+  let center = calCenter();
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 4,
+    center: center
+  });
+  service = new google.maps.places.PlacesService(map);
+  // if (currentDataSpan === 'week') {
+  //   locations.forEach(location => {
+  //     currentMarkers.push(createMarker(location));
+  //   });
+  // } else {
+  //   locations.forEach(location => {
+  //     currentMarkers.push(createMarker(location));
+  //   });
+  // }
+}
+
+function createMarker(location) {
+  let marker = new google.maps.Marker({
+    position: location,
+    map: map,
+    draggable: false,
+    animation: google.maps.Animation.DROP
+  });
+  marker.addListener('click', _ => {
+    if (marker.getAnimation() !== null) {
+      marker.setAnimation(null);
+    } else {
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+    }
+  });
+  new ClickEventHandler(marker, location);
+  return marker;
+}
+
+class ClickEventHandler {
+  constructor(marker, location) {
+    this.location = location;
+    this.marker = marker;
+    this.placesService = service;
+    this.infowindow = infowindow;
+    this.infowindowContent = document.getElementById('infowindow-content');
+    this.infowindow.setContent(this.infowindowContent);
+    this.marker.addListener('click', () => this.handleClick);
+  }
+
+  handleClick(event) {
+    console.log('You clicked on: ' + event.latLng);
+    // If the event has a placeId, use it.
+    if (event.placeId) {
+      console.log('You clicked on place:' + event.placeId);
+      event.stop();
+      this.getPlaceInformation(event.placeId);
+    }
+  }
+
+  getPlaceInformation(placeId) {
+    let me = this;
+    this.placesService.getDetails({
+      placeId: placeId
+    }, function (place, status) {
+      if (status === 'OK') {
+        me.infowindow.close();
+        me.infowindow.setPosition(place.geometry.location);
+        me.infowindowContent.children['place-name'].textContent = place.name;
+        me.infowindowContent.children['place-id'].textContent = `Place-id: ${place.place_id}`;
+        me.infowindowContent.children['place-address'].textContent =
+          place.formatted_address;
+        me.infowindow.open(me.marker);
+      }
+    });
+  }
+}
+
+function calCenter() {
+  let preCenter = locations.reduce(([latitude, longitude], currentLocation) => [latitude + currentLocation.lat,
+    longitude + currentLocation.lng
+  ], [0, 0]);
+  return {
+    lat: preCenter[0] / locations.length,
+    lng: preCenter[1] / locations.length
+  };
+}
+
+function clearMarkers() {
+  setMapOnAll(null);
+}
+
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+  currentMarkers.forEach(marker => marker.setMap(map));
+}
+
+// Shows any markers currently in the array.
+function showMarkers() {
+  setMapOnAll(map);
 }

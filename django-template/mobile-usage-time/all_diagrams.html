@@ -111,8 +111,18 @@
     .hidden-element {
       display: none;
     }
+
+    #metaDataArea {
+      background: #ffffff url("help.jpg") no-repeat left top;
+      background-size: cover;
+    }
+
+    .buttons-wrapper {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
   </style>
-  <link rel="stylesheet" href="./metaDataBoard.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
@@ -146,7 +156,7 @@
         </div>
       </div>
     </section>
-    
+
     <section class="map-wrapper">
       <div class="map-card">
         <div class="diagram-title">The most frequent visited places</div>
@@ -162,13 +172,10 @@
 
 </body>
 <script src="https://d3js.org/d3.v5.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
-<script src="./locations.js"></script>
 <script
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVZZVGG9W9UsAuhSQ89YzySBGhr6hkk7c&libraries=places&callback=initMap"
   async defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
 <script src="./data.js"></script>
 <script src="./draw.js"></script>
-
 </html>
