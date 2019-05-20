@@ -104,6 +104,40 @@
     'Sent': 4
   }]
 
+  const callings = [{
+    'date': '03-24',
+    'Received': 8,
+    'Sent': 2
+  }, {
+    'date': '03-26',
+    'Received': 5,
+    'Sent': 1
+  }, {
+    'date': '03-27',
+    'Received': 10,
+    'Sent': 4
+  }, {
+    'date': '03-28',
+    'Received': 5,
+    'Sent': 2
+  }, {
+    'date': '03-29',
+    'Received': 7,
+    'Sent': 2
+  }, {
+    'date': '03-30',
+    'Received': 7,
+    'Sent': 4
+  }, {
+    'date': '04-01',
+    'Received': 7,
+    'Sent': 8
+  }, {
+    'date': '04-02',
+    'Received': 14,
+    'Sent': 4
+  }]
+
   const locations = [{
     lat: -31.563910,
     lng: 147.154312

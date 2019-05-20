@@ -4,6 +4,13 @@ let currentDataType = 'applications',
 let map;
 let infowindow;
 let service;
+
+let pieSvg;
+let xScale;
+let yScale;
+let xAxis;
+let yAxis;
+
 let currentMarkers = [];
 const width = 500;
 const height = 350;
@@ -12,8 +19,8 @@ const radius = Math.min(width, height) / 2 - padding;
 const legendWidth = 12;
 const switchHandler = {
   'callings': {
-    'week': () => console.log('callingsWeekhandler'),
-    'month': 'monthdata'
+    'week': () => callHandler(callings),
+    'month': () => callHandler(callings)
   },
   'messages': {
     'week': () => messageHandler(messages),
@@ -29,40 +36,24 @@ const switchHandler = {
   }
 };
 
+const tooltip = d3.select("body").append("div").classed("tooltip", true);
 
-const tooltip = d3.select("body")
-  .append("div")
-  .classed("tooltip", true);
-
-const svg = d3.select('#mainSvg')
-  .attr("width", width)
-  .attr("height", height);
-
-let pieSvg;
-let xScale;
-let yScale;
-let xAxis;
-let yAxis;
+const svg = d3.select('#mainSvg').attr("width", width).attr("height", height);
 
 
-//set click function based on the operation
+//set click handler for all buttons
 d3.selectAll('.data-pick').on('click', _ => {
   currentDataType = d3.event.currentTarget.textContent.toLocaleLowerCase();
-  pickedTypeAndTime(currentDataType, currentDataSpan);
+  console.log(currentDataType);
+  switchHandler[currentDataType][currentDataSpan]();
 });
 
 d3.selectAll('.time-pick').on('click', _ => {
   currentDataSpan = d3.event.currentTarget.textContent.toLocaleLowerCase();
-  pickedTypeAndTime(currentDataType, currentDataSpan);
+  switchHandler[currentDataType][currentDataSpan]();
 })
 
-function pickedTypeAndTime(dataType = currentDataType, dataTime = currentDataSpan) {
-  console.log(`DataType: ${dataType}
-  dataTime: ${dataTime}`);
-  switchHandler[currentDataType][currentDataSpan]();
-}
-
-pickedTypeAndTime();
+switchHandler[currentDataType][currentDataSpan]();
 
 function locationHandler(locations) {
   if (currentMarkers.length) {
@@ -80,10 +71,11 @@ function locationHandler(locations) {
 }
 
 function messageHandler(messages) {
-  d3.selectAll('.svg-card').classed('hidden-element', false);
-  d3.select('.map-card').classed('hidden-element', true);
-  d3.select('#mainSvgTitle').text(`Latest ${currentDataType} grouped by ${currentDataSpan}`)
-  renderMessages(messages);
+  renderMessagesOrCalls('Messages', messages);
+}
+
+function callHandler(callings) {
+  renderMessagesOrCalls('Callings', callings);
 }
 
 function applicationHandler(psyData) {
@@ -99,6 +91,7 @@ function applicationHandler(psyData) {
     drawAppDiagram(psyData);
   }
 }
+
 
 function drawAppDiagram(psyData) {
   d3.select("#svg-wrapper")
@@ -278,8 +271,9 @@ function drawPieChart(date, psyData) {
 }
 
 
-
-function renderMessages(messages) {
+function clearSvg() {
+  d3.selectAll('.svg-card').classed('hidden-element', false);
+  d3.select('.map-card').classed('hidden-element', true);
   //remove all contents of the appended pie-chart.
   let newSvg = d3.select(".appdetails");
   if (!newSvg.empty()) {
@@ -287,25 +281,30 @@ function renderMessages(messages) {
     newSvg.remove();
     svg.selectAll("*").remove();
   }
+}
 
+function renderMessagesOrCalls(type, pickedData) {
+  clearSvg();
   if (d3.select('.change-button').empty()) {
     d3.select(".svg-card").append('div')
       .classed('change-button', true)
       .html(`
-    <button class="btn btn-light message-btn">Received</button>
-    <button class="btn btn-light message-btn">Sent</button>
+    <button class="btn btn-light info-btn">Received</button>
+    <button class="btn btn-light info-btn">Sent</button>
     `);
-    d3.selectAll('.message-btn').on('click', _ => updateMessages(d3.event.currentTarget.textContent, messages));
+    d3.selectAll(`.info-btn`).on('click', _ => updateMessagesOrCalls(type, d3.event.currentTarget.textContent, pickedData));
+  } else {
+    d3.selectAll(`.info-btn`).on('click',null);
+    d3.selectAll(`.info-btn`).on('click', _ => updateMessagesOrCalls(type, d3.event.currentTarget.textContent, pickedData));
   }
-
-  updateMessages(currentMessageType, messages);
+  updateMessagesOrCalls(type, currentMessageType, pickedData);
 }
 
 
-function updateMessages(key = 'Received', messages) {
+function updateMessagesOrCalls(type, key, pickedData) {
   // update Y axis
   currentMessageType = key;
-  d3.select('#mainSvgTitle').text(`Latest ${currentDataSpan} ${currentMessageType} Messages`)
+  d3.select('#mainSvgTitle').text(`Latest ${currentDataSpan} ${currentMessageType} ${type}`)
   // remove the old axes.
   d3.select('g.x-axis').remove();
   d3.select('g.y-axis').remove();
@@ -317,7 +316,7 @@ function updateMessages(key = 'Received', messages) {
   xAxis = svg.append('g')
     .classed('x-axis', true)
     .attr('transform', `translate(0,${height - padding})`)
-  xScale.domain(messages.map(d => d.date));
+  xScale.domain(pickedData.map(d => d.date));
   xAxis.call(d3.axisBottom(xScale))
     .selectAll("text")
     .style("text-anchor", "end")
@@ -331,11 +330,11 @@ function updateMessages(key = 'Received', messages) {
   yAxis = svg.append("g")
     .classed("y-axis", true)
     .attr('transform', `translate(${padding}, 0)`);
-  yScale.domain([0, d3.max(messages, d => d[key])]);
+  yScale.domain([0, d3.max(pickedData, d => d[key])]);
   yAxis.call(d3.axisLeft(yScale).ticks(4));
   let u = svg.selectAll("rect")
-    .classed(`message-${key.toLocaleLowerCase}`, true)
-    .data(messages.map(d => _.pick(d, ['date', key])));
+    .classed(`${type.toLocaleLowerCase()}-${key.toLocaleLowerCase}`, true)
+    .data(pickedData.map(d => _.pick(d, ['date', key])));
   u.exit()
     .remove();
   u.enter()
