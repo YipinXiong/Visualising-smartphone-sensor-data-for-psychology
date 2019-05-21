@@ -4,7 +4,7 @@ let currentDataType = 'applications',
 let map;
 let infowindow;
 let service;
-
+let locations = locationsByWeek;
 let pieSvg;
 let xScale;
 let yScale;
@@ -12,24 +12,24 @@ let xAxis;
 let yAxis;
 
 let currentMarkers = [];
-const width = 500;
-const height = 350;
-const padding = 80;
+const width = 450;
+const height = 300;
+const padding = 70;
 const radius = Math.min(width, height) / 2 - padding;
 const legendWidth = 12;
 
 const switchHandler = {
   'week': {
-    'applications': () => applicationHandler(psyData),
-    'locations': () => locationHandler(locations),
-    'messages': () => messageHandler(messages),
-    'callings': () => callHandler(callings)
+    'applications': () => applicationHandler(appUsagesByWeek),
+    'locations': () => locationHandler(locationsByWeek),
+    'messages': () => messageHandler(messagesByWeek),
+    'callings': () => callHandler(callingsByWeek)
   },
   'month': {
-    'applications': () => applicationHandler(psyData),
-    'locations': () => locationHandler(locations),
-    'messages': () => messageHandler(messages),
-    'callings': () => callHandler(callings)
+    'applications': () => applicationHandler(appUsagesByMonth),
+    'locations': () => locationHandler(locationsByMonth),
+    'messages': () => messageHandler(messagesByMonth),
+    'callings': () => callHandler(callingsByMonth)
   }
 }
 
@@ -74,14 +74,18 @@ function callHandler(callings) {
 }
 
 function applicationHandler(psyData) {
+  console.log(currentDataSpan);
+  console.log(currentDataType);
+  console.log(psyData);
   if (!d3.select('.change-button').empty()) {
     d3.selectAll('.change-button').selectAll("*").remove();
     d3.selectAll('.change-button').remove();
     svg.selectAll("*").remove();
   }
-  d3.select('#mainSvgTitle').text(`Latest ${currentDataSpan} screen usage`)
+  d3.select('#mainSvgTitle').text(`Latest ${currentDataSpan} Applications Usage`)
   d3.selectAll('.svg-card').classed('hidden-element', false);
   d3.select('.map-card').classed('hidden-element', true);
+  clearSvg();
   if (d3.select("#appDetails").empty()) {
     drawAppDiagram(psyData);
   }
@@ -105,13 +109,14 @@ function drawAppDiagram(psyData) {
     .attr("height", height)
     .append("g")
     .classed("date-pie-chart", true)
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+    .attr("transform", "translate(" + (width - 2*padding) / 2 + "," + height / 2 + ")");
 
   //New ADD: initial text
-  pieSvg.append("text")
+  d3.select("#appDetails").append("text")
     .classed("initialText", true)
     .style("text-anchor", "middle")
     .style("font-weight", "bold")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
     .text("Please select a date from the left side.")
 
   xScale = d3.scaleBand()
@@ -266,7 +271,7 @@ function drawPieChart(date, psyData) {
     .attr("width", legendWidth)
     .attr("height", legendWidth)
     .attr("fill", d => pieColor(d.data.key))
-    .attr("transform", (d, i) => `translate(${width - 1.5*padding}, ${(i * 20 + 20)})`)
+    .attr("transform", (d, i) => `translate(${width - 1.7*padding}, ${(i * 20 + 50)})`)
     .classed("legend-rect", true);
 
   legendText.exit().remove();
@@ -276,8 +281,8 @@ function drawPieChart(date, psyData) {
     .classed('legend-text', true)
     .text(d => d.data.key)
     .style("font-size", 16)
-    .attr("y", (d, i) => i * 20 + 20 + legendWidth)
-    .attr("x", width - 1.2 * padding);
+    .attr("y", (d, i) => i * 20 + 50 + legendWidth)
+    .attr("x", width - 1.5 * padding);
 }
 
 
@@ -292,7 +297,7 @@ function clearSvg() {
     newSvg.remove();
     svg.selectAll("*").remove();
   }
-  if(!changeBtn.empty()) {
+  if (!changeBtn.empty()) {
     changeBtn.selectAll('*').remove();
     changeBtn.remove();
     svg.selectAll("*").remove();
@@ -303,7 +308,7 @@ function renderMessagesOrCalls(type, pickedData) {
   clearSvg();
   switch (type) {
     case 'Messages':
-      currentMessageType="Received";
+      currentMessageType = "Received";
       d3.select(".svg-card").append('div')
         .classed('change-button', true)
         .html(`
@@ -312,7 +317,7 @@ function renderMessagesOrCalls(type, pickedData) {
             `);
       break;
     default:
-      currentMessageType="Incoming";
+      currentMessageType = "Incoming";
       d3.select(".svg-card").append('div')
         .classed('change-button', true)
         .html(`
@@ -386,7 +391,7 @@ function initMap() {
   infowindow = new google.maps.InfoWindow();
   let center = calCenter();
   map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 4,
+    zoom: 10,
     center: center
   });
   service = new google.maps.places.PlacesService(map);
