@@ -17,24 +17,21 @@ const height = 350;
 const padding = 80;
 const radius = Math.min(width, height) / 2 - padding;
 const legendWidth = 12;
+
 const switchHandler = {
-  'callings': {
-    'week': () => callHandler(callings),
-    'month': () => callHandler(callings)
+  'week':{
+    'applications':() => applicationHandler(psyData),
+    'locations':() => locationHandler(locations),
+    'messages': () => messageHandler(messages),
+    'callings': () => callHandler(callings)
   },
-  'messages': {
-    'week': () => messageHandler(messages),
-    'month': () => messageHandler(messages)
-  },
-  'applications': {
-    'week': () => applicationHandler(psyData),
-    'month': () => applicationHandler(psyData)
-  },
-  'locations': {
-    'week': () => locationHandler(locations),
-    'month': () => locationHandler(locations)
+  'month':{
+    'applications':() => applicationHandler(psyData),
+    'locations':() => locationHandler(locations),
+    'messages': () => messageHandler(messages),
+    'callings': () => callHandler(callings)
   }
-};
+}
 
 const tooltip = d3.select("body").append("div").classed("tooltip", true);
 
@@ -45,17 +42,19 @@ const svg = d3.select('#mainSvg').attr("width", width).attr("height", height);
 d3.selectAll('.data-pick').on('click', _ => {
   currentDataType = d3.event.currentTarget.textContent.toLocaleLowerCase();
   console.log(currentDataType);
-  switchHandler[currentDataType][currentDataSpan]();
+  switchHandler[currentDataSpan][currentDataType]();
 });
 
 d3.selectAll('.time-pick').on('click', _ => {
   currentDataSpan = d3.event.currentTarget.textContent.toLocaleLowerCase();
-  switchHandler[currentDataType][currentDataSpan]();
+  switchHandler[currentDataSpan][currentDataType]();
 })
 
-switchHandler[currentDataType][currentDataSpan]();
+switchHandler[currentDataSpan][currentDataType]();
 
 function locationHandler(locations) {
+    d3.selectAll('.svg-card').classed('hidden-element', true);
+  d3.select('.map-card').classed('hidden-element', false);
   if (currentMarkers.length) {
     clearMarkers();
   }
@@ -64,9 +63,6 @@ function locationHandler(locations) {
     currentMarkers.push(createMarker(location));
   });
   showMarkers();
-
-  d3.selectAll('.svg-card').classed('hidden-element', true);
-  d3.select('.map-card').classed('hidden-element', false);
 
 }
 
