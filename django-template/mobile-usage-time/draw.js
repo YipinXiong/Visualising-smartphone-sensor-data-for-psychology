@@ -19,15 +19,15 @@ const radius = Math.min(width, height) / 2 - padding;
 const legendWidth = 12;
 
 const switchHandler = {
-  'week':{
-    'applications':() => applicationHandler(psyData),
-    'locations':() => locationHandler(locations),
+  'week': {
+    'applications': () => applicationHandler(psyData),
+    'locations': () => locationHandler(locations),
     'messages': () => messageHandler(messages),
     'callings': () => callHandler(callings)
   },
-  'month':{
-    'applications':() => applicationHandler(psyData),
-    'locations':() => locationHandler(locations),
+  'month': {
+    'applications': () => applicationHandler(psyData),
+    'locations': () => locationHandler(locations),
     'messages': () => messageHandler(messages),
     'callings': () => callHandler(callings)
   }
@@ -53,7 +53,7 @@ d3.selectAll('.time-pick').on('click', _ => {
 switchHandler[currentDataSpan][currentDataType]();
 
 function locationHandler(locations) {
-    d3.selectAll('.svg-card').classed('hidden-element', true);
+  d3.selectAll('.svg-card').classed('hidden-element', true);
   d3.select('.map-card').classed('hidden-element', false);
   if (currentMarkers.length) {
     clearMarkers();
@@ -63,7 +63,6 @@ function locationHandler(locations) {
     currentMarkers.push(createMarker(location));
   });
   showMarkers();
-
 }
 
 function messageHandler(messages) {
@@ -181,19 +180,34 @@ function showTooltips(d) {
     .style("top", d3.event.pageY + 30 + "px")
   if (d.totalFreq) {
     temp.html(`
-              <p>Date: ${d.date}</p>
-              <p>Frequencies: ${d.totalFreq}</p>
-            `);
+      <p>Date: ${d.date}</p>
+      <p>Frequencies: ${d.totalFreq}</p>
+    `);
   } else if (d.Received) {
     temp.html(`
-              <p>Date: ${d.date}</p>
-              <p>Received: ${d.Received}</p>
-            `);
-  } else {
+      <p>Date: ${d.date}</p>
+      <p>Received: ${d.Received}</p>
+    `);
+  } else if (d.Sent) {
     temp.html(`
       <p>Date: ${d.date}</p>
       <p>Sent: ${d.Sent}</p>
     `);
+  } else if (d.Outgoing) {
+    temp.html(`
+      <p>Date: ${d.date}</p>
+      <p>Outgoing: ${d.Outgoing}</p>
+    `);
+  } else if (d.Incoming) {
+    temp.html(`
+      <p>Date: ${d.date}</p>
+      <p>Incoming: ${d.Incoming}</p>
+    `);
+  } else {
+    temp.html(`
+    <p>Date: ${d.date}</p>
+    <p>Missed: ${d.Missed}</p>
+  `);
   }
 }
 
@@ -272,33 +286,52 @@ function clearSvg() {
   d3.select('.map-card').classed('hidden-element', true);
   //remove all contents of the appended pie-chart.
   let newSvg = d3.select(".appdetails");
+  let changeBtn = d3.selectAll('.change-button');
   if (!newSvg.empty()) {
     newSvg.selectAll("*").remove();
     newSvg.remove();
+    svg.selectAll("*").remove();
+  }
+  if(!changeBtn.empty()) {
+    changeBtn.selectAll('*').remove();
+    changeBtn.remove();
     svg.selectAll("*").remove();
   }
 }
 
 function renderMessagesOrCalls(type, pickedData) {
   clearSvg();
-  if (d3.select('.change-button').empty()) {
-    d3.select(".svg-card").append('div')
-      .classed('change-button', true)
-      .html(`
-    <button class="btn btn-light info-btn">Received</button>
-    <button class="btn btn-light info-btn">Sent</button>
-    `);
-    d3.selectAll(`.info-btn`).on('click', _ => updateMessagesOrCalls(type, d3.event.currentTarget.textContent, pickedData));
-  } else {
-    d3.selectAll(`.info-btn`).on('click',null);
-    d3.selectAll(`.info-btn`).on('click', _ => updateMessagesOrCalls(type, d3.event.currentTarget.textContent, pickedData));
+  switch (type) {
+    case 'Messages':
+      currentMessageType="Received";
+      d3.select(".svg-card").append('div')
+        .classed('change-button', true)
+        .html(`
+              <button class="btn btn-light info-btn">Received</button>
+              <button class="btn btn-light info-btn">Sent</button>
+            `);
+      break;
+    default:
+      currentMessageType="Incoming";
+      d3.select(".svg-card").append('div')
+        .classed('change-button', true)
+        .html(`
+            <button class="btn btn-light info-btn">Incoming</button>
+            <button class="btn btn-light info-btn">Outgoing</button>
+            <button class="btn btn-light info-btn">Missed</button>
+          `);
+      break;
   }
+  d3.selectAll(`.info-btn`).on('click', _ => updateMessagesOrCalls(type, d3.event.currentTarget.textContent, pickedData));
   updateMessagesOrCalls(type, currentMessageType, pickedData);
 }
 
 
 function updateMessagesOrCalls(type, key, pickedData) {
   // update Y axis
+  console.log(pickedData);
+  console.log(key);
+  console.log(type);
   currentMessageType = key;
   d3.select('#mainSvgTitle').text(`Latest ${currentDataSpan} ${currentMessageType} ${type}`)
   // remove the old axes.
