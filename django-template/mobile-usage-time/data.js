@@ -1,435 +1,495 @@
 const appUsagesByWeek = [{
-  "date": "04-10",
-  "totalFreq": 61,
-  "app": {
-    "Clock": 1,
-    "Samsung Pay": 12,
-    "Phone": 19,
-    "Messages": 2,
-    "Gmail": 3,
-    "Hangouts": 1,
-    "Chrome": 23
+  'date': '04-10',
+  'AppFreq': 61,
+  'totalFreq': 137,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Clock': 1,
+    'Samsung Pay': 12,
+    'Phone': 19,
+    'Messages': 2,
+    'Gmail': 3,
+    'Hangouts': 1,
+    'Chrome': 23
   }
 }, {
-  "date": "04-11",
-  "totalFreq": 96,
-  "app": {
-    "Phone": 22,
-    "Samsung Pay": 17,
-    "Chrome": 16,
-    "Messages": 9,
-    "UPRIGHT GO": 7,
-    "SEMA3": 5,
-    "WhatsApp": 3,
-    "Clock": 3,
-    "Settings": 3,
-    "others": 11
+  'date': '04-11',
+  'AppFreq': 96,
+  'totalFreq': 167,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Phone': 22,
+    'Samsung Pay': 17,
+    'Chrome': 16,
+    'Messages': 9,
+    'UPRIGHT GO': 7,
+    'SEMA3': 5,
+    'WhatsApp': 3,
+    'Clock': 3,
+    'Settings': 3,
+    'others': 11
   }
 }, {
-  "date": "04-12",
-  "totalFreq": 136,
-  "app": {
-    "Phone": 41,
-    "Chrome": 31,
-    "Messages": 23,
-    "Samsung Pay": 21,
-    "SEMA3": 5,
-    "Settings": 5,
-    "Calendar": 4,
-    "Gmail": 3,
-    "Twitter": 2,
-    "others": 1
+  'date': '04-12',
+  'AppFreq': 136,
+  'totalFreq': 197,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Phone': 41,
+    'Chrome': 31,
+    'Messages': 23,
+    'Samsung Pay': 21,
+    'SEMA3': 5,
+    'Settings': 5,
+    'Calendar': 4,
+    'Gmail': 3,
+    'Twitter': 2,
+    'others': 1
   }
 }, {
-  "date": "04-13",
-  "totalFreq": 203,
-  "app": {
-    "Phone": 44,
-    "Skype": 32,
-    "Chrome": 31,
-    "Messages": 27,
-    "Samsung Pay": 24,
-    "Twitter": 8,
-    "Samsung Health": 7,
-    "Gmail": 6,
-    "Maps": 5,
-    "others": 19
+  'date': '04-13',
+  'AppFreq': 203,
+  'totalFreq': 217,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Phone': 44,
+    'Skype': 32,
+    'Chrome': 31,
+    'Messages': 27,
+    'Samsung Pay': 24,
+    'Twitter': 8,
+    'Samsung Health': 7,
+    'Gmail': 6,
+    'Maps': 5,
+    'others': 19
   }
 }, {
-  "date": "04-14",
-  "totalFreq": 163,
-  "app": {
-    "Phone": 36,
-    "Samsung Pay": 31,
-    "Messages": 31,
-    "Chrome": 30,
-    "Twitter": 11,
-    "Hangouts": 5,
-    "WhatsApp": 3,
-    "Camera": 3,
-    "Gallery": 3,
-    "others": 10
+  'date': '04-14',
+  'AppFreq': 163,
+  'totalFreq': 215,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Phone': 36,
+    'Samsung Pay': 31,
+    'Messages': 31,
+    'Chrome': 30,
+    'Twitter': 11,
+    'Hangouts': 5,
+    'WhatsApp': 3,
+    'Camera': 3,
+    'Gallery': 3,
+    'others': 10
   }
 }, {
-  "date": "04-15",
-  "totalFreq": 113,
-  "app": {
-    "Chrome": 49,
-    "Samsung Pay": 22,
-    "Phone": 16,
-    "Twitter": 8,
-    "Gmail": 7,
-    "Settings": 2,
-    "Messages": 2,
-    "Camera": 2,
-    "Gallery": 2,
-    "others": 3
+  'date': '04-15',
+  'AppFreq': 113,
+  'totalFreq': 246,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Chrome': 49,
+    'Samsung Pay': 22,
+    'Phone': 16,
+    'Twitter': 8,
+    'Gmail': 7,
+    'Settings': 2,
+    'Messages': 2,
+    'Camera': 2,
+    'Gallery': 2,
+    'others': 3
   }
 }, {
-  "date": "04-16",
-  "totalFreq": 56,
-  "app": {
-    "Phone": 22,
-    "Samsung Pay": 9,
-    "Chrome": 9,
-    "Messages": 4,
-    "Clock": 3,
-    "Gmail": 3,
-    "WhatsApp": 2,
-    "Calendar": 2,
-    "Gallery": 1,
-    "others": 1
+  'date': '04-16',
+  'AppFreq': 56,
+  'totalFreq': 69,
+  'MostUsed': 'Morning',
+  'app': {
+    'Phone': 22,
+    'Samsung Pay': 9,
+    'Chrome': 9,
+    'Messages': 4,
+    'Clock': 3,
+    'Gmail': 3,
+    'WhatsApp': 2,
+    'Calendar': 2,
+    'Gallery': 1,
+    'others': 1
   }
 }]
 
 const appUsagesByMonth = [{
-  "date": "03-25",
-  "totalFreq": 9,
-  "app": {
-    "Settings": 1,
-    "Samsung Pay": 2,
-    "Twitter": 3,
-    "Messages": 2,
-    "Phone": 1
+  'date': '03-25',
+  'AppFreq': 9,
+  'totalFreq': 248,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Settings': 1,
+    'Samsung Pay': 2,
+    'Twitter': 3,
+    'Messages': 2,
+    'Phone': 1
   }
 }, {
-  "date": "03-26",
-  "totalFreq": 149,
-  "app": {
-    "Phone": 52,
-    "Samsung Pay": 39,
-    "Chrome": 19,
-    "Samsung Health": 12,
-    "Messages": 8,
-    "Gmail": 7,
-    "Calendar": 3,
-    "Galaxy Store": 2,
-    "Weather": 2,
-    "others": 5
+  'date': '03-26',
+  'AppFreq': 149,
+  'totalFreq': 185,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Phone': 52,
+    'Samsung Pay': 39,
+    'Chrome': 19,
+    'Samsung Health': 12,
+    'Messages': 8,
+    'Gmail': 7,
+    'Calendar': 3,
+    'Galaxy Store': 2,
+    'Weather': 2,
+    'others': 5
   }
 }, {
-  "date": "03-27",
-  "totalFreq": 183,
-  "app": {
-    "Phone": 48,
-    "Samsung Pay": 38,
-    "Chrome": 32,
-    "Messages": 29,
-    "Twitter": 9,
-    "Gmail": 6,
-    "Settings": 4,
-    "Samsung capture": 3,
-    "Package installer": 3,
-    "others": 11
+  'date': '03-27',
+  'AppFreq': 183,
+  'totalFreq': 300,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Phone': 48,
+    'Samsung Pay': 38,
+    'Chrome': 32,
+    'Messages': 29,
+    'Twitter': 9,
+    'Gmail': 6,
+    'Settings': 4,
+    'Samsung capture': 3,
+    'Package installer': 3,
+    'others': 11
   }
 }, {
-  "date": "03-28",
-  "totalFreq": 63,
-  "app": {
-    "Phone": 17,
-    "Clock": 3,
-    "Samsung Pay": 12,
-    "Messages": 15,
-    "Gmail": 4,
-    "Calendar": 2,
-    "Chrome": 8,
-    "Twitter": 2
+  'date': '03-28',
+  'AppFreq': 63,
+  'totalFreq': 110,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Phone': 17,
+    'Clock': 3,
+    'Samsung Pay': 12,
+    'Messages': 15,
+    'Gmail': 4,
+    'Calendar': 2,
+    'Chrome': 8,
+    'Twitter': 2
   }
 }, {
-  "date": "03-29",
-  "totalFreq": 123,
-  "app": {
-    "Samsung Pay": 29,
-    "Chrome": 28,
-    "Phone": 19,
-    "Twitter": 18,
-    "Messages": 12,
-    "Gmail": 5,
-    "Samsung Internet": 4,
-    "Clock": 3,
-    "Calendar": 3,
-    "others": 2
+  'date': '03-29',
+  'AppFreq': 123,
+  'totalFreq': 246,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Samsung Pay': 29,
+    'Chrome': 28,
+    'Phone': 19,
+    'Twitter': 18,
+    'Messages': 12,
+    'Gmail': 5,
+    'Samsung Internet': 4,
+    'Clock': 3,
+    'Calendar': 3,
+    'others': 2
   }
 }, {
-  "date": "03-30",
-  "totalFreq": 91,
-  "app": {
-    "Samsung Pay": 18,
-    "Gmail": 6,
-    "Chrome": 11,
-    "Twitter": 10,
-    "Samsung Internet": 9,
-    "Phone": 23,
-    "Messages": 14
+  'date': '03-30',
+  'AppFreq': 91,
+  'totalFreq': 131,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Samsung Pay': 18,
+    'Gmail': 6,
+    'Chrome': 11,
+    'Twitter': 10,
+    'Samsung Internet': 9,
+    'Phone': 23,
+    'Messages': 14
   }
 }, {
-  "date": "03-31",
-  "totalFreq": 49,
-  "app": {
-    "Samsung Pay": 11,
-    "Phone": 10,
-    "Chrome": 6,
-    "Settings": 5,
-    "Messages": 4,
-    "Twitter": 4,
-    "Hangouts": 3,
-    "Google": 3,
-    "Samsung Internet": 1,
-    "others": 2
+  'date': '03-31',
+  'AppFreq': 49,
+  'totalFreq': 55,
+  'MostUsed': 'Morning',
+  'app': {
+    'Samsung Pay': 11,
+    'Phone': 10,
+    'Chrome': 6,
+    'Settings': 5,
+    'Messages': 4,
+    'Twitter': 4,
+    'Hangouts': 3,
+    'Google': 3,
+    'Samsung Internet': 1,
+    'others': 2
   }
 }, {
-  "date": "04-01",
-  "totalFreq": 92,
-  "app": {
-    "Chrome": 25,
-    "Samsung Pay": 20,
-    "Messages": 18,
-    "Phone": 13,
-    "Twitter": 5,
-    "Samsung Internet": 4,
-    "Gmail": 2,
-    "Samsung Health": 2,
-    "Settings": 1,
-    "others": 2
+  'date': '04-01',
+  'AppFreq': 92,
+  'totalFreq': 216,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Chrome': 25,
+    'Samsung Pay': 20,
+    'Messages': 18,
+    'Phone': 13,
+    'Twitter': 5,
+    'Samsung Internet': 4,
+    'Gmail': 2,
+    'Samsung Health': 2,
+    'Settings': 1,
+    'others': 2
   }
 }, {
-  "date": "04-02",
-  "totalFreq": 81,
-  "app": {
-    "Phone": 28,
-    "Chrome": 21,
-    "Samsung Pay": 8,
-    "Gmail": 6,
-    "Twitter": 5,
-    "Messages": 4,
-    "Samsung Internet": 2,
-    "Gallery": 2,
-    "Samsung Notes": 2,
-    "others": 3
+  'date': '04-02',
+  'AppFreq': 81,
+  'totalFreq': 110,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Phone': 28,
+    'Chrome': 21,
+    'Samsung Pay': 8,
+    'Gmail': 6,
+    'Twitter': 5,
+    'Messages': 4,
+    'Samsung Internet': 2,
+    'Gallery': 2,
+    'Samsung Notes': 2,
+    'others': 3
   }
 }, {
-  "date": "04-03",
-  "totalFreq": 112,
-  "app": {
-    "Chrome": 33,
-    "Phone": 25,
-    "Samsung Pay": 24,
-    "Messages": 15,
-    "Gmail": 4,
-    "Gallery": 4,
-    "Clock": 2,
-    "Twitter": 2,
-    "Calendar": 1,
-    "others": 2
+  'date': '04-03',
+  'AppFreq': 112,
+  'totalFreq': 217,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Chrome': 33,
+    'Phone': 25,
+    'Samsung Pay': 24,
+    'Messages': 15,
+    'Gmail': 4,
+    'Gallery': 4,
+    'Clock': 2,
+    'Twitter': 2,
+    'Calendar': 1,
+    'others': 2
   }
 }, {
-  "date": "04-04",
-  "totalFreq": 131,
-  "app": {
-    "Samsung Pay": 26,
-    "Gmail": 3,
-    "Chrome": 30,
-    "Twitter": 13,
-    "Phone": 24,
-    "Messages": 18,
-    "Clock": 3,
-    "Calendar": 4,
-    "Hangouts": 10
+  'date': '04-04',
+  'AppFreq': 131,
+  'totalFreq': 358,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Samsung Pay': 26,
+    'Gmail': 3,
+    'Chrome': 30,
+    'Twitter': 13,
+    'Phone': 24,
+    'Messages': 18,
+    'Clock': 3,
+    'Calendar': 4,
+    'Hangouts': 10
   }
 }, {
-  "date": "04-05",
-  "totalFreq": 115,
-  "app": {
-    "Chrome": 38,
-    "Samsung Pay": 18,
-    "Phone": 18,
-    "Messages": 16,
-    "Hangouts": 8,
-    "Maps": 6,
-    "Calendar": 4,
-    "Clock": 3,
-    "Gmail": 3,
-    "others": 1
+  'date': '04-05',
+  'AppFreq': 115,
+  'totalFreq': 247,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Chrome': 38,
+    'Samsung Pay': 18,
+    'Phone': 18,
+    'Messages': 16,
+    'Hangouts': 8,
+    'Maps': 6,
+    'Calendar': 4,
+    'Clock': 3,
+    'Gmail': 3,
+    'others': 1
   }
 }, {
-  "date": "04-06",
-  "totalFreq": 62,
-  "app": {
-    "Twitter": 8,
-    "Samsung Pay": 18,
-    "Chrome": 8,
-    "Messages": 5,
-    "Phone": 15,
-    "Hangouts": 4,
-    "Clock": 3,
-    "Samsung Internet": 1
+  'date': '04-06',
+  'AppFreq': 62,
+  'totalFreq': 107,
+  'MostUsed': 'LateNight',
+  'app': {
+    'Twitter': 8,
+    'Samsung Pay': 18,
+    'Chrome': 8,
+    'Messages': 5,
+    'Phone': 15,
+    'Hangouts': 4,
+    'Clock': 3,
+    'Samsung Internet': 1
   }
 }, {
-  "date": "04-07",
-  "totalFreq": 122,
-  "app": {
-    "Messages": 3,
-    "Chrome": 70,
-    "Gallery": 4,
-    "Twitter": 2,
-    "Samsung Pay": 11,
-    "Phone": 25,
-    "Camera": 4,
-    "Gmail": 2,
-    "Hangouts": 1
+  'date': '04-07',
+  'AppFreq': 122,
+  'totalFreq': 164,
+  'MostUsed': 'Morning',
+  'app': {
+    'Messages': 3,
+    'Chrome': 70,
+    'Gallery': 4,
+    'Twitter': 2,
+    'Samsung Pay': 11,
+    'Phone': 25,
+    'Camera': 4,
+    'Gmail': 2,
+    'Hangouts': 1
   }
 }, {
-  "date": "04-08",
-  "totalFreq": 99,
-  "app": {
-    "Chrome": 31,
-    "Samsung Pay": 14,
-    "Messages": 14,
-    "Phone": 11,
-    "Twitter": 9,
-    "Westpac": 8,
-    "Gmail": 6,
-    "Gallery": 2,
-    "Samsung capture": 1,
-    "others": 3
+  'date': '04-08',
+  'AppFreq': 99,
+  'totalFreq': 205,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Chrome': 31,
+    'Samsung Pay': 14,
+    'Messages': 14,
+    'Phone': 11,
+    'Twitter': 9,
+    'Westpac': 8,
+    'Gmail': 6,
+    'Gallery': 2,
+    'Samsung capture': 1,
+    'others': 3
   }
 }, {
-  "date": "04-09",
-  "totalFreq": 120,
-  "app": {
-    "Chrome": 36,
-    "Samsung Pay": 20,
-    "Phone": 15,
-    "Messages": 14,
-    "Skype": 11,
-    "Google Play Store": 5,
-    "Twitter": 5,
-    "Package installer": 4,
-    "SEMA3": 3,
-    "others": 7
+  'date': '04-09',
+  'AppFreq': 120,
+  'totalFreq': 184,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Chrome': 36,
+    'Samsung Pay': 20,
+    'Phone': 15,
+    'Messages': 14,
+    'Skype': 11,
+    'Google Play Store': 5,
+    'Twitter': 5,
+    'Package installer': 4,
+    'SEMA3': 3,
+    'others': 7
   }
 }, {
-  "date": "04-10",
-  "totalFreq": 65,
-  "app": {
-    "Twitter": 1,
-    "Samsung Pay": 15,
-    "Clock": 1,
-    "Phone": 19,
-    "Messages": 2,
-    "Gmail": 3,
-    "Hangouts": 1,
-    "Chrome": 23
+  'date': '04-10',
+  'AppFreq': 65,
+  'totalFreq': 144,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Twitter': 1,
+    'Samsung Pay': 15,
+    'Clock': 1,
+    'Phone': 19,
+    'Messages': 2,
+    'Gmail': 3,
+    'Hangouts': 1,
+    'Chrome': 23
   }
 }, {
-  "date": "04-11",
-  "totalFreq": 96,
-  "app": {
-    "Phone": 22,
-    "Samsung Pay": 17,
-    "Chrome": 16,
-    "Messages": 9,
-    "UPRIGHT GO": 7,
-    "SEMA3": 5,
-    "WhatsApp": 3,
-    "Clock": 3,
-    "Settings": 3,
-    "others": 11
+  'date': '04-11',
+  'AppFreq': 96,
+  'totalFreq': 167,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Phone': 22,
+    'Samsung Pay': 17,
+    'Chrome': 16,
+    'Messages': 9,
+    'UPRIGHT GO': 7,
+    'SEMA3': 5,
+    'WhatsApp': 3,
+    'Clock': 3,
+    'Settings': 3,
+    'others': 11
   }
 }, {
-  "date": "04-12",
-  "totalFreq": 136,
-  "app": {
-    "Phone": 41,
-    "Chrome": 31,
-    "Messages": 23,
-    "Samsung Pay": 21,
-    "SEMA3": 5,
-    "Settings": 5,
-    "Calendar": 4,
-    "Gmail": 3,
-    "Twitter": 2,
-    "others": 1
+  'date': '04-12',
+  'AppFreq': 136,
+  'totalFreq': 197,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Phone': 41,
+    'Chrome': 31,
+    'Messages': 23,
+    'Samsung Pay': 21,
+    'SEMA3': 5,
+    'Settings': 5,
+    'Calendar': 4,
+    'Gmail': 3,
+    'Twitter': 2,
+    'others': 1
   }
 }, {
-  "date": "04-13",
-  "totalFreq": 203,
-  "app": {
-    "Phone": 44,
-    "Skype": 32,
-    "Chrome": 31,
-    "Messages": 27,
-    "Samsung Pay": 24,
-    "Twitter": 8,
-    "Samsung Health": 7,
-    "Gmail": 6,
-    "Maps": 5,
-    "others": 19
+  'date': '04-13',
+  'AppFreq': 203,
+  'totalFreq': 217,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Phone': 44,
+    'Skype': 32,
+    'Chrome': 31,
+    'Messages': 27,
+    'Samsung Pay': 24,
+    'Twitter': 8,
+    'Samsung Health': 7,
+    'Gmail': 6,
+    'Maps': 5,
+    'others': 19
   }
 }, {
-  "date": "04-14",
-  "totalFreq": 163,
-  "app": {
-    "Phone": 36,
-    "Samsung Pay": 31,
-    "Messages": 31,
-    "Chrome": 30,
-    "Twitter": 11,
-    "Hangouts": 5,
-    "WhatsApp": 3,
-    "Camera": 3,
-    "Gallery": 3,
-    "others": 10
+  'date': '04-14',
+  'AppFreq': 163,
+  'totalFreq': 215,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Phone': 36,
+    'Samsung Pay': 31,
+    'Messages': 31,
+    'Chrome': 30,
+    'Twitter': 11,
+    'Hangouts': 5,
+    'WhatsApp': 3,
+    'Camera': 3,
+    'Gallery': 3,
+    'others': 10
   }
 }, {
-  "date": "04-15",
-  "totalFreq": 113,
-  "app": {
-    "Chrome": 49,
-    "Samsung Pay": 22,
-    "Phone": 16,
-    "Twitter": 8,
-    "Gmail": 7,
-    "Settings": 2,
-    "Messages": 2,
-    "Camera": 2,
-    "Gallery": 2,
-    "others": 3
+  'date': '04-15',
+  'AppFreq': 113,
+  'totalFreq': 246,
+  'MostUsed': 'Afternoon',
+  'app': {
+    'Chrome': 49,
+    'Samsung Pay': 22,
+    'Phone': 16,
+    'Twitter': 8,
+    'Gmail': 7,
+    'Settings': 2,
+    'Messages': 2,
+    'Camera': 2,
+    'Gallery': 2,
+    'others': 3
   }
 }, {
-  "date": "04-16",
-  "totalFreq": 56,
-  "app": {
-    "Phone": 22,
-    "Samsung Pay": 9,
-    "Chrome": 9,
-    "Messages": 4,
-    "Clock": 3,
-    "Gmail": 3,
-    "WhatsApp": 2,
-    "Calendar": 2,
-    "Gallery": 1,
-    "others": 1
+  'date': '04-16',
+  'AppFreq': 56,
+  'totalFreq': 69,
+  'MostUsed': 'Morning',
+  'app': {
+    'Phone': 22,
+    'Samsung Pay': 9,
+    'Chrome': 9,
+    'Messages': 4,
+    'Clock': 3,
+    'Gmail': 3,
+    'WhatsApp': 2,
+    'Calendar': 2,
+    'Gallery': 1,
+    'others': 1
   }
 }]
 

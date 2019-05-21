@@ -12,8 +12,8 @@ let xAxis;
 let yAxis;
 
 let currentMarkers = [];
-const width = 450;
-const height = 300;
+const width = 500;
+const height = 350;
 const padding = 70;
 const radius = Math.min(width, height) / 2 - padding;
 const legendWidth = 12;
@@ -74,9 +74,6 @@ function callHandler(callings) {
 }
 
 function applicationHandler(psyData) {
-  console.log(currentDataSpan);
-  console.log(currentDataType);
-  console.log(psyData);
   if (!d3.select('.change-button').empty()) {
     d3.selectAll('.change-button').selectAll("*").remove();
     d3.selectAll('.change-button').remove();
@@ -86,9 +83,7 @@ function applicationHandler(psyData) {
   d3.selectAll('.svg-card').classed('hidden-element', false);
   d3.select('.map-card').classed('hidden-element', true);
   clearSvg();
-  if (d3.select("#appDetails").empty()) {
-    drawAppDiagram(psyData);
-  }
+  drawAppDiagram(psyData);
 }
 
 
@@ -109,7 +104,7 @@ function drawAppDiagram(psyData) {
     .attr("height", height)
     .append("g")
     .classed("date-pie-chart", true)
-    .attr("transform", "translate(" + (width - 2*padding) / 2 + "," + height / 2 + ")");
+    .attr("transform", "translate(" + (width - 2 * padding) / 2 + "," + height / 2 + ")");
 
   //New ADD: initial text
   d3.select("#appDetails").append("text")
@@ -224,8 +219,8 @@ function hideTooltips() {
 
 function drawPieChart(date, psyData) {
 
-  let data = psyData.filter(d => d.date === date)[0];
-  let readyData = d3.entries(data.app);
+  let dataOfDate = psyData.filter(d => d.date === date)[0];
+  let readyData = d3.entries(dataOfDate.app);
   const pieColor = d3.scaleOrdinal()
     .domain(readyData.map(d => d.key))
     .range(d3.schemeDark2);
@@ -261,10 +256,10 @@ function drawPieChart(date, psyData) {
   //update legend
   const legendRect = d3.select("#appDetails").selectAll(".legend-rect").data(pie(readyData));
   const legendText = d3.select("#appDetails").selectAll('.legend-text').data(pie(readyData));
-
+  const mostFreq = d3.select("#appDetails").selectAll('.most-freq-text').data([dataOfDate]);
+  
   // update legend size pattern
   legendRect.exit().remove();
-
   legendRect.enter()
     .append('rect')
     .merge(legendRect)
@@ -273,17 +268,26 @@ function drawPieChart(date, psyData) {
     .attr("fill", d => pieColor(d.data.key))
     .attr("transform", (d, i) => `translate(${width - 1.7*padding}, ${(i * 20 + 50)})`)
     .classed("legend-rect", true);
-
+   
   legendText.exit().remove();
-  legendText.enter()
-    .append("text")
+  legendText.enter().append("text")
     .merge(legendText)
     .classed('legend-text', true)
     .text(d => d.data.key)
-    .style("font-size", 16)
+    .style("font-size", 13)
     .attr("y", (d, i) => i * 20 + 50 + legendWidth)
     .attr("x", width - 1.5 * padding);
-}
+
+  mostFreq.exit().remove();
+  mostFreq.enter().append("text")
+    .merge(mostFreq)
+    .classed('most-freq-text', true)
+    .text(d => `The Most Active Period: ${d.MostUsed}`)
+    .style("font-size", 13)
+    .style('font-weight', 'bold')
+    .attr("y", height - 0.5*padding)
+    .attr("x", width - 3 * padding);
+}   
 
 
 function clearSvg() {
@@ -334,9 +338,6 @@ function renderMessagesOrCalls(type, pickedData) {
 
 function updateMessagesOrCalls(type, key, pickedData) {
   // update Y axis
-  console.log(pickedData);
-  console.log(key);
-  console.log(type);
   currentMessageType = key;
   d3.select('#mainSvgTitle').text(`Latest ${currentDataSpan} ${currentMessageType} ${type}`)
   // remove the old axes.
