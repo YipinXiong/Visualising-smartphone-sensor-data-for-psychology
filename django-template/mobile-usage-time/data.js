@@ -650,9 +650,9 @@ const callingsByMonth = [{
 const messagesByWeek = [{
   "date": "04-09",
   "Received": 2,
-  "Sent": 0,
+  "Sent": 1,
   "ReceivedSentRatio": 2,
-  "SentReceivedRatio": 0.0
+  "SentReceivedRatio": 1.0
 }, {
   "date": "04-13",
   "Received": 1,

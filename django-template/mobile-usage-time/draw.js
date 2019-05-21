@@ -187,11 +187,13 @@ function showTooltips(d) {
     temp.html(`
       <p>Date: ${d.date}</p>
       <p>Received: ${d.Received}</p>
+      <p>Received / Sent: ${d.ReceivedSentRatio}</p>
     `);
   } else if (d.Sent) {
     temp.html(`
       <p>Date: ${d.date}</p>
       <p>Sent: ${d.Sent}</p>
+      <p>Sent / Received:${d.SentReceivedRatio}</p>
     `);
   } else if (d.Outgoing) {
     temp.html(`
@@ -257,7 +259,7 @@ function drawPieChart(date, psyData) {
   const legendRect = d3.select("#appDetails").selectAll(".legend-rect").data(pie(readyData));
   const legendText = d3.select("#appDetails").selectAll('.legend-text').data(pie(readyData));
   const mostFreq = d3.select("#appDetails").selectAll('.most-freq-text').data([dataOfDate]);
-  
+
   // update legend size pattern
   legendRect.exit().remove();
   legendRect.enter()
@@ -268,7 +270,7 @@ function drawPieChart(date, psyData) {
     .attr("fill", d => pieColor(d.data.key))
     .attr("transform", (d, i) => `translate(${width - 1.7*padding}, ${(i * 20 + 50)})`)
     .classed("legend-rect", true);
-   
+
   legendText.exit().remove();
   legendText.enter().append("text")
     .merge(legendText)
@@ -285,9 +287,9 @@ function drawPieChart(date, psyData) {
     .text(d => `The Most Active Period: ${d.MostUsed}`)
     .style("font-size", 13)
     .style('font-weight', 'bold')
-    .attr("y", height - 0.5*padding)
+    .attr("y", height - 0.5 * padding)
     .attr("x", width - 3 * padding);
-}   
+}
 
 
 function clearSvg() {
@@ -344,6 +346,7 @@ function updateMessagesOrCalls(type, key, pickedData) {
   d3.select('g.x-axis').remove();
   d3.select('g.y-axis').remove();
   // Initialize the X call axis
+
   xScale = d3.scaleBand()
     .paddingInner(0.3)
     .paddingOuter(0.2)
@@ -369,7 +372,7 @@ function updateMessagesOrCalls(type, key, pickedData) {
   yAxis.call(d3.axisLeft(yScale).ticks(4));
   let u = svg.selectAll("rect")
     .classed(`${type.toLocaleLowerCase()}-${key.toLocaleLowerCase}`, true)
-    .data(pickedData.map(d => _.pick(d, ['date', key])));
+    .data(pickedData.map(d => _.pick(d, ['date', 'ReceivedSentRatio', 'SentReceivedRatio', key])));
   u.exit()
     .remove();
   u.enter()
