@@ -140,6 +140,7 @@
           <button class="btn btn-light data-pick" id="appBtn">Applications</button>
           <button class="btn btn-light data-pick" id="textBtn">Messages</button>
           <button class="btn btn-light data-pick" id="callBtn">Callings</button>
+          <button class="btn btn-light data-pick" id="screenBtn">Screens</button>
         </div>
         <div class="time-btns-wrapper">
           <button class="btn btn-light time-pick">Week</button>
@@ -163,19 +164,66 @@
         <div id="map"></div>
       </div>
     </section>
-    <div id="infowindow-content">
-      <span id="place-name" class="title"></span><br>
-      <span id="place-id"></span><br>
-      <span id="place-address"></span>
-    </div>
   </main>
 
 </body>
 <script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
+<script src="./data.js"></script>
+<script>
+  // Initialize and add the map
+  function initMap() {
+    let center = calCenter();
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 10,
+      center: center
+    });
+  }
+
+  function createMarker(location) {
+    let marker = new google.maps.Marker({
+      position: location,
+      map: map,
+      draggable: false,
+      animation: google.maps.Animation.DROP
+    });
+    marker.addListener('click', _ => {
+      if (marker.getAnimation() !== null) {
+        marker.setAnimation(null);
+      } else {
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+      }
+    });
+    return marker;
+  }
+
+
+  function calCenter() {
+    let preCenter = locations.reduce(([latitude, longitude], currentLocation) => [latitude + currentLocation.lat,
+      longitude + currentLocation.lng
+    ], [0, 0]);
+    return {
+      lat: preCenter[0] / locations.length,
+      lng: preCenter[1] / locations.length
+    };
+  }
+
+  function clearMarkers() {
+    setMapOnAll(null);
+  }
+
+  // Sets the map on all markers in the array.
+  function setMapOnAll(map) {
+    currentMarkers.forEach(marker => marker.setMap(map));
+  }
+
+  // Shows any markers currently in the array.
+  function showMarkers() {
+    setMapOnAll(map);
+  }
+</script>
+<script src="./draw.js"></script>
 <script
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVZZVGG9W9UsAuhSQ89YzySBGhr6hkk7c&libraries=places&callback=initMap"
   async defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.min.js"></script>
-<script src="./data.js"></script>
-<script src="./draw.js"></script>
 </html>

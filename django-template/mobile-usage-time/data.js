@@ -1,3 +1,7 @@
+let map;
+
+let currentMarkers = [];
+
 const appUsagesByWeek = [{
   'date': '04-10',
   'AppFreq': 61,
@@ -836,6 +840,7 @@ const locationsByWeek = [{
   "lng": 145.0282439
 }]
 
+let locations = locationsByWeek;
 const locationsByMonth = [{
   "lat": -37.700588,
   "lng": 144.9641675
@@ -908,4 +913,160 @@ const locationsByMonth = [{
 }, {
   "lat": -37.8020074,
   "lng": 144.9067458
+}]
+
+const screensByWeek = [{
+  'Date': '2019-05-16',
+  'Most used': 'Night',
+  'Frequency': 5
+}, {
+  'Date': '2019-05-17',
+  'Most used': 'Evening',
+  'Frequency': 43
+}, {
+  'Date': '2019-05-18',
+  'Most used': 'Morning',
+  'Frequency': 45
+}, {
+  'Date': '2019-05-19',
+  'Most used': 'Night',
+  'Frequency': 26
+}, {
+  'Date': '2019-05-20',
+  'Most used': 'Afternoon',
+  'Frequency': 38
+}, {
+  'Date': '2019-05-21',
+  'Most used': 'Night',
+  'Frequency': 50
+}, {
+  'Date': '2019-05-22',
+  'Most used': 'Morning',
+  'Frequency': 48
+}, {
+  'Date': '2019-05-23',
+  'Most used': 'LateNight',
+  'Frequency': 1
+}]
+
+const screensByMonth = [{
+  'Date': '2019-04-23',
+  'Most used': 'Afternoon',
+  'Frequency': 15
+}, {
+  'Date': '2019-04-24',
+  'Most used': 'Afternoon',
+  'Frequency': 38
+}, {
+  'Date': '2019-04-25',
+  'Most used': 'Night',
+  'Frequency': 12
+}, {
+  'Date': '2019-04-26',
+  'Most used': 'Night',
+  'Frequency': 38
+}, {
+  'Date': '2019-04-27',
+  'Most used': 'Night',
+  'Frequency': 27
+}, {
+  'Date': '2019-04-28',
+  'Most used': 'Afternoon',
+  'Frequency': 38
+}, {
+  'Date': '2019-04-29',
+  'Most used': 'Afternoon',
+  'Frequency': 44
+}, {
+  'Date': '2019-04-30',
+  'Most used': 'Afternoon',
+  'Frequency': 38
+}, {
+  'Date': '2019-05-01',
+  'Most used': 'LateNight',
+  'Frequency': 24
+}, {
+  'Date': '2019-05-02',
+  'Most used': 'LateNight',
+  'Frequency': 3
+}, {
+  'Date': '2019-05-04',
+  'Most used': 'Afternoon',
+  'Frequency': 19
+}, {
+  'Date': '2019-05-05',
+  'Most used': 'Afternoon',
+  'Frequency': 20
+}, {
+  'Date': '2019-05-06',
+  'Most used': 'Afternoon',
+  'Frequency': 15
+}, {
+  'Date': '2019-05-07',
+  'Most used': 'Night',
+  'Frequency': 18
+}, {
+  'Date': '2019-05-08',
+  'Most used': 'Evening',
+  'Frequency': 20
+}, {
+  'Date': '2019-05-09',
+  'Most used': 'LateNight',
+  'Frequency': 8
+}, {
+  'Date': '2019-05-10',
+  'Most used': 'Evening',
+  'Frequency': 25
+}, {
+  'Date': '2019-05-11',
+  'Most used': 'Night',
+  'Frequency': 18
+}, {
+  'Date': '2019-05-12',
+  'Most used': 'LateNight',
+  'Frequency': 12
+}, {
+  'Date': '2019-05-13',
+  'Most used': 'Night',
+  'Frequency': 22
+}, {
+  'Date': '2019-05-14',
+  'Most used': 'Afternoon',
+  'Frequency': 36
+}, {
+  'Date': '2019-05-15',
+  'Most used': 'Afternoon',
+  'Frequency': 35
+}, {
+  'Date': '2019-05-16',
+  'Most used': 'LateNight',
+  'Frequency': 33
+}, {
+  'Date': '2019-05-17',
+  'Most used': 'Evening',
+  'Frequency': 43
+}, {
+  'Date': '2019-05-18',
+  'Most used': 'Morning',
+  'Frequency': 45
+}, {
+  'Date': '2019-05-19',
+  'Most used': 'Night',
+  'Frequency': 26
+}, {
+  'Date': '2019-05-20',
+  'Most used': 'Afternoon',
+  'Frequency': 38
+}, {
+  'Date': '2019-05-21',
+  'Most used': 'Night',
+  'Frequency': 50
+}, {
+  'Date': '2019-05-22',
+  'Most used': 'Morning',
+  'Frequency': 48
+}, {
+  'Date': '2019-05-23',
+  'Most used': 'LateNight',
+  'Frequency': 1
 }]

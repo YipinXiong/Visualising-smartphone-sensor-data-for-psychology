@@ -1,17 +1,14 @@
 let currentDataType = 'applications',
   currentDataSpan = 'week',
   currentMessageType = 'Received';
-let map;
-let infowindow;
-let service;
-let locations = locationsByWeek;
+
 let pieSvg;
 let xScale;
 let yScale;
 let xAxis;
 let yAxis;
 
-let currentMarkers = [];
+
 const width = 500;
 const height = 350;
 const padding = 70;
@@ -23,13 +20,15 @@ const switchHandler = {
     'applications': () => applicationHandler(appUsagesByWeek),
     'locations': () => locationHandler(locationsByWeek),
     'messages': () => messageHandler(messagesByWeek),
-    'callings': () => callHandler(callingsByWeek)
+    'callings': () => callHandler(callingsByWeek),
+    'screens': () => screenHandler(screensByWeek)
   },
   'month': {
     'applications': () => applicationHandler(appUsagesByMonth),
     'locations': () => locationHandler(locationsByMonth),
     'messages': () => messageHandler(messagesByMonth),
-    'callings': () => callHandler(callingsByMonth)
+    'callings': () => callHandler(callingsByMonth),
+    'screens': () => screenHandler(screensByMonth)
   }
 }
 
@@ -51,6 +50,73 @@ d3.selectAll('.time-pick').on('click', _ => {
 })
 
 switchHandler[currentDataSpan][currentDataType]();
+
+function screenHandler(screenData) {
+  d3.select('#mainSvgTitle').text(`Latest ${currentDataSpan} Screen Usage`)
+  clearSvg();
+  drawScreenDiagram(screenData);
+}
+
+function drawScreenDiagram(screenData) {
+  xScale = d3.scaleBand()
+    .paddingInner(0.3)
+    .paddingOuter(0.2)
+    .domain(screenData.map(d => d.Date))
+    .range([padding, width - padding]);
+
+  yScale = d3.scaleLinear()
+    .domain([0, d3.max(screenData, d => d.Frequency)])
+    .range([height - padding, padding]);
+
+  xAxis = d3.axisBottom(xScale);
+
+  yAxis = d3.axisLeft(yScale)
+    .ticks(4);
+
+  svg.append("g")
+    .attr('transform', `translate(0,${height - padding})`)
+    .call(xAxis)
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-.8em")
+    .attr("dy", "-.55em")
+    .attr("transform", "rotate(-60)");
+
+  svg.append('g')
+    .attr('transform', `translate(${padding}, 0)`)
+    .call(yAxis)
+
+  svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height / 2)
+    .attr("y", padding)
+    .attr("dy", "-3em")
+    .style("text-anchor", "middle")
+    .text("Frequency")
+
+  svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", height - padding)
+    .attr("dy", "3em")
+    .style("text-anchor", "middle")
+    .text("Date");
+
+  svg.append("g")
+    .selectAll("rect")
+    .data(screenData)
+    .enter()
+    .append("rect")
+    .classed("bar", true)
+    .attr("x", d => xScale(d.Date))
+    .attr("width", xScale.bandwidth())
+    .attr("y", d => yScale(d.Frequency))
+    .attr("height", d => height - padding - yScale(d.Frequency))
+    .attr("fill", "steelblue")
+    .on("mousemove", showTooltips)
+    .on("mouseout", hideTooltips)
+    .transition()
+    .duration(1000)
+}
 
 function locationHandler(locations) {
   d3.selectAll('.svg-card').classed('hidden-element', true);
@@ -74,14 +140,7 @@ function callHandler(callings) {
 }
 
 function applicationHandler(psyData) {
-  if (!d3.select('.change-button').empty()) {
-    d3.selectAll('.change-button').selectAll("*").remove();
-    d3.selectAll('.change-button').remove();
-    svg.selectAll("*").remove();
-  }
   d3.select('#mainSvgTitle').text(`Latest ${currentDataSpan} Applications Usage`)
-  d3.selectAll('.svg-card').classed('hidden-element', false);
-  d3.select('.map-card').classed('hidden-element', true);
   clearSvg();
   drawAppDiagram(psyData);
 }
@@ -205,10 +264,16 @@ function showTooltips(d) {
       <p>Date: ${d.date}</p>
       <p>Incoming: ${d.Incoming}</p>
     `);
-  } else {
+  } else if(d.Missed) {
     temp.html(`
     <p>Date: ${d.date}</p>
     <p>Missed: ${d.Missed}</p>
+  `);
+  } else {
+    temp.html(`
+    <p>Date: ${d.Date}</p>
+    <p>Freqency: ${d.Frequency}</p>
+    <p>Most Active Period: ${d['Most used']}</p>
   `);
   }
 }
@@ -301,13 +366,12 @@ function clearSvg() {
   if (!newSvg.empty()) {
     newSvg.selectAll("*").remove();
     newSvg.remove();
-    svg.selectAll("*").remove();
   }
   if (!changeBtn.empty()) {
     changeBtn.selectAll('*').remove();
     changeBtn.remove();
-    svg.selectAll("*").remove();
   }
+  svg.selectAll("*").remove();
 }
 
 function renderMessagesOrCalls(type, pickedData) {
@@ -387,97 +451,4 @@ function updateMessagesOrCalls(type, key, pickedData) {
     .attr("width", xScale.bandwidth())
     .attr("height", d => height - padding - yScale(d[key]))
     .attr("fill", "steelblue")
-}
-
-
-// Initialize and add the map
-function initMap() {
-  infowindow = new google.maps.InfoWindow();
-  let center = calCenter();
-  map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 10,
-    center: center
-  });
-  service = new google.maps.places.PlacesService(map);
-}
-
-function createMarker(location) {
-  let marker = new google.maps.Marker({
-    position: location,
-    map: map,
-    draggable: false,
-    animation: google.maps.Animation.DROP
-  });
-  marker.addListener('click', _ => {
-    if (marker.getAnimation() !== null) {
-      marker.setAnimation(null);
-    } else {
-      marker.setAnimation(google.maps.Animation.BOUNCE);
-    }
-  });
-  new ClickEventHandler(marker, location);
-  return marker;
-}
-
-class ClickEventHandler {
-  constructor(marker, location) {
-    this.location = location;
-    this.marker = marker;
-    this.placesService = service;
-    this.infowindow = infowindow;
-    this.infowindowContent = document.getElementById('infowindow-content');
-    this.infowindow.setContent(this.infowindowContent);
-    this.marker.addListener('click', () => this.handleClick);
-  }
-
-  handleClick(event) {
-    console.log('You clicked on: ' + event.latLng);
-    // If the event has a placeId, use it.
-    if (event.placeId) {
-      console.log('You clicked on place:' + event.placeId);
-      event.stop();
-      this.getPlaceInformation(event.placeId);
-    }
-  }
-
-  getPlaceInformation(placeId) {
-    let me = this;
-    this.placesService.getDetails({
-      placeId: placeId
-    }, function (place, status) {
-      if (status === 'OK') {
-        me.infowindow.close();
-        me.infowindow.setPosition(place.geometry.location);
-        me.infowindowContent.children['place-name'].textContent = place.name;
-        me.infowindowContent.children['place-id'].textContent = `Place-id: ${place.place_id}`;
-        me.infowindowContent.children['place-address'].textContent =
-          place.formatted_address;
-        me.infowindow.open(me.marker);
-      }
-    });
-  }
-}
-
-function calCenter() {
-  let preCenter = locations.reduce(([latitude, longitude], currentLocation) => [latitude + currentLocation.lat,
-    longitude + currentLocation.lng
-  ], [0, 0]);
-  return {
-    lat: preCenter[0] / locations.length,
-    lng: preCenter[1] / locations.length
-  };
-}
-
-function clearMarkers() {
-  setMapOnAll(null);
-}
-
-// Sets the map on all markers in the array.
-function setMapOnAll(map) {
-  currentMarkers.forEach(marker => marker.setMap(map));
-}
-
-// Shows any markers currently in the array.
-function showMarkers() {
-  setMapOnAll(map);
 }
