@@ -264,7 +264,7 @@ function showTooltips(d) {
       <p>Date: ${d.date}</p>
       <p>Incoming: ${d.Incoming}</p>
     `);
-  } else if(d.Missed) {
+  } else if (d.Missed) {
     temp.html(`
     <p>Date: ${d.date}</p>
     <p>Missed: ${d.Missed}</p>
@@ -285,9 +285,9 @@ function hideTooltips() {
 }
 
 function drawPieChart(date, psyData) {
-
   let dataOfDate = psyData.filter(d => d.date === date)[0];
   let readyData = d3.entries(dataOfDate.app);
+
   const pieColor = d3.scaleOrdinal()
     .domain(readyData.map(d => d.key))
     .range(d3.schemeDark2);
@@ -319,6 +319,37 @@ function drawPieChart(date, psyData) {
     .attr('stroke', 'white')
     .style('stroke-width', '2px')
     .style('opacity', 0.7);
+
+  //label positionning arc
+  const labelArc = d3.arc()
+    .innerRadius(radius * 0.9)
+    .outerRadius(radius * 0.9);
+
+  const allLabels = pieSvg
+    .selectAll('.arc-label')
+    .data(pie(readyData));
+  allLabels.exit().remove();
+
+  allLabels
+    .enter()
+    .append('text')
+    .merge(allLabels)
+    .classed('arc-label', true)
+    .text(d => {
+      let parsedPercentage = (Math.round((d.data.value/dataOfDate.AppFreq) * 100 )).toFixed(0);
+      console.log(parsedPercentage);
+      let finalString = parsedPercentage< 4? '': `${parsedPercentage}%`
+      return finalString;
+    })
+    .attr('transform', d => {
+      let pos = labelArc.centroid(d);
+      pos[0]*=1.05;
+      pos[1]*=1.05;      
+      return 'translate(' + pos + ')';
+    })
+    .style('font-size', '16px')
+    .style('fill', 'black')
+    .style('text-anchor', "middle");
 
   //update legend
   const legendRect = d3.select("#appDetails").selectAll(".legend-rect").data(pie(readyData));
