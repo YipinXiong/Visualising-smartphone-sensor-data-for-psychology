@@ -276,15 +276,15 @@ class MainContent extends React.Component {
   render () {
     return (
         <div id="svg-wrapper">
-          <div class="svg-card">
-            <div class="svg-title">Latest 7 days Screen Usage</div>
-            <div class="diagram-wrapper">
+          <div className="svg-card">
+            <div className="svg-title">Latest 7 days Screen Usage</div>
+            <div className="diagram-wrapper">
               <svg id="freqDate"></svg>
             </div>
           </div>
-          <div class="svg-card">
-            <div class="svg-title">Latest 7 days Screen Usage</div>
-            <div class="diagram-wrapper">
+          <div className="svg-card">
+            <div className="svg-title">Latest 7 days Screen Usage</div>
+            <div className="diagram-wrapper">
               <svg id="appDetails"></svg>
             </div>
           </div>
